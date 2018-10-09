@@ -1,0 +1,13 @@
+.vscode
+pkg/
+bin/
+src/snmp_server/model.db
+src/snmp_server/allocate_id
+src/snmp_server/conf/
+src/snmp_server/log/
+src/snmp_server/snmp_server
+src/snmp_server/xlsmibs/*.txt
+src/snmp_server/xlsmibs/*.xls
+src/snmp_server/xlsmibs/xlsmibs
+src/snmp_server/task.db
+src/snmp_server/._snmp_server
