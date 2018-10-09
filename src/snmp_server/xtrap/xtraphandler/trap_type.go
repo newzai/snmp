@@ -1,0 +1,16 @@
+package xtraphandler
+
+const trapTypeREGISTER = ".1.3.6.1.4.1.1800.50.1.1"
+const trapTypeKEEPALIVE = ".1.3.6.1.4.1.1800.50.1.2"
+const trapTypeUpgradeReport = ".1.3.6.1.4.1.1800.50.1.3"
+const trapTypeRestoreCfgReport = ".1.3.6.1.4.1.1800.50.1.4"
+const trapTypeSaveCfgReport = ".1.3.6.1.4.1.1800.50.1.5"
+const trapTypeDeviceRebootReport = ".1.3.6.1.4.1.1800.50.1.6"
+const trapTypeDeviceMICWarning = ".1.3.6.1.4.1.1800.50.1.7"
+const trapTypeDeviceSpeakerWaring = ".1.3.6.1.4.1.1800.50.1.8"
+const trapTypeDeviceLEDWarning = ".1.3.6.1.4.1.1800.50.1.9"
+const trapTypeDeviceKeypWarning = ".1.3.6.1.4.1.1800.50.1.10"
+const trapTypeDeviceQuickWarning = ".1.3.6.1.4.1.1800.50.1.11"
+const trapTypeDeviceCameraWarning = ".1.3.6.1.4.1.1800.50.1.12"
+const trapTypeDeviceLCDWarning = ".1.3.6.1.4.1.1800.50.1.13"
+const trapTypeDeviceShellWarning = ".1.3.6.1.4.1.1800.50.1.14"
