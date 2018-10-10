@@ -10,8 +10,8 @@ import (
 )
 
 var genHandler = flag.Bool("handler", false, "-handler=true|false")
-var sheetIndex = flag.Int("index", 0, "-index=0|1")
-var xlsfile = flag.String("xlsfile", "", "-xlsfile=昆仑产品mib表-v2.8.xls")
+var sheetIndex = flag.Int("index", 2, "-index=0|1")
+var xlsfile = flag.String("xlsfile", "昆仑产品mib表-v3.0.xls", "-xlsfile=昆仑产品mib表-v2.8.xls")
 var help = flag.Bool("help", false, "-help=true")
 
 func toUpper(name string) string {
@@ -61,13 +61,15 @@ func main() {
 		return nil
 	}`
 	oids := make(map[string]bool)
+	fmt.Println(sheet.MaxRow)
 	for i := 0; i <= int(sheet.MaxRow); i++ {
 		row := sheet.Row(i)
 		if i < 2 {
 			continue
 		}
+		fmt.Println(i, " ", row.Col(1))
 		if row != nil {
-			if row.Col(2) == "" && row.Col(3) == "" {
+			if row.Col(1) == "" {
 				continue
 			}
 			_, exist := oids[row.Col(1)]
