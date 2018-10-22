@@ -1,6 +1,7 @@
 package xhttp
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"snmp_server/mibs"
@@ -66,6 +67,8 @@ func snmpBatch(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"result": 1, "message": err.Error()})
 		return
 	}
+	jdata, _ := json.MarshalIndent(&request, "", " ")
+	seelog.Info("snmp_batch request:\n", string(jdata))
 	if !authToken(request.Token, c) {
 		return
 	}

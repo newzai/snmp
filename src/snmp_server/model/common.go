@@ -3,7 +3,8 @@ package model
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"snmp_server/xdb"
+
+	"github.com/go-xorm/xorm"
 
 	"github.com/cihub/seelog"
 )
@@ -21,11 +22,11 @@ const (
 )
 
 //InitDatabase db init
-func InitDatabase() {
+func InitDatabase(engine *xorm.Engine) {
 
-	xdb.Engine.Sync2(new(User), new(Zone), new(Terminal))
-	rootid, _ := CreatePath("root", xdb.Engine)
-	admin, err := GetUserByName("admin", xdb.Engine)
+	engine.Sync2(new(User), new(Zone), new(Terminal))
+	rootid, _ := CreatePath("root", engine)
+	admin, err := GetUserByName("admin", engine)
 	if err != nil {
 		seelog.Warnf("get admin user err:%s", err)
 		return
@@ -38,7 +39,7 @@ func InitDatabase() {
 		admin.Password = hex.EncodeToString(h.Sum(nil))
 		admin.Type = 1
 		admin.Parent = rootid
-		CreateUser(admin, xdb.Engine)
+		CreateUser(admin, engine)
 	} else {
 
 	}

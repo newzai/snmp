@@ -11,6 +11,9 @@ var Engine *xorm.Engine
 //EngineTask for task db
 var EngineTask *xorm.Engine
 
+//EngineWarning for warning db
+var EngineWarning *xorm.Engine
+
 // Init xdb
 func Init(showSQL bool) {
 	var err error
@@ -21,7 +24,10 @@ func Init(showSQL bool) {
 
 	EngineTask, err = xorm.NewEngine("sqlite3", "./task.db")
 
+	EngineWarning, err = xorm.NewEngine("sqlite3", "./warning.db")
+
 	Engine.ShowSQL(showSQL)
 	EngineTask.ShowSQL(showSQL)
+	EngineWarning.ShowSQL(true)
 
 }

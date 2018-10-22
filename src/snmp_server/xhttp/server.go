@@ -29,6 +29,8 @@ func Run(httpPort int) {
 		//v1.GET("/upload_hardware", uploadHardwareWeb)
 		v1.POST("/get_all_hardware", getAllHardware)
 		v1.POST("/get_config_file", getConfigFile)
+		v1.POST("/get_warnings", getWarning)
+		v1.POST("/warning_test", warningTest)
 	}
 
 	r.Run(fmt.Sprintf(":%d", httpPort))

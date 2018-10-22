@@ -2,7 +2,6 @@ package xtask
 
 import (
 	"errors"
-	"snmp_server/xdb"
 	"time"
 
 	"github.com/go-xorm/xorm"
@@ -106,7 +105,7 @@ func (r *Upgrade) Find(engine *xorm.Engine) ([]*Upgrade, error) {
 }
 
 //InitDatabase init
-func InitDatabase() {
+func InitDatabase(engine *xorm.Engine) {
 
-	xdb.EngineTask.Sync2(new(Upgrade))
+	engine.Sync2(new(Upgrade))
 }

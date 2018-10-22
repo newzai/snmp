@@ -12,6 +12,7 @@ import (
 	"snmp_server/xsnmp"
 	"snmp_server/xtask"
 	"snmp_server/xtrap"
+	"snmp_server/xwarning"
 	"strconv"
 	"xconf"
 
@@ -46,8 +47,9 @@ func main() {
 	xconf.InitSeelog("./conf/", "./log/", "snmp", false, true, xconf.Info)
 	seelog.Info("snmp server start..")
 	xdb.Init(*showSQL)
-	model.InitDatabase()
-	xtask.InitDatabase()
+	model.InitDatabase(xdb.Engine)
+	xtask.InitDatabase(xdb.EngineTask)
+	xwarning.InitDatabase(xdb.EngineWarning)
 	go xhttp.Run(*httpPort)
 
 	xsnmp.Default.Start("0.0.0.0", uint16(*snmpPort), xtrap.OnTrapHandler)
