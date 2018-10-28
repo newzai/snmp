@@ -45,7 +45,7 @@ func getitem(c *gin.Context) {
 		var items []itemInfo
 		zones, err := model.GetZonesByParent(request.Data.ItemID, xdb.Engine)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"result": 1, "message": err.Error()})
+			c.JSON(http.StatusOK, gin.H{"result": 1, "message": err.Error()})
 			break
 		}
 		for _, zone := range zones {
@@ -85,7 +85,11 @@ func getitem(c *gin.Context) {
 		}
 		c.JSON(http.StatusOK, result)
 	case 2:
-		terminal, _ := model.GetTerminalByID(request.Data.ItemID, xdb.Engine)
+		terminal, err := model.GetTerminalByID(request.Data.ItemID, xdb.Engine)
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{"result": 1, "message": err.Error()})
+			break
+		}
 		var items []itemInfo
 		status := 0
 		if terminal != nil {

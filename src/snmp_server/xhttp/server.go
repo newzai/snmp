@@ -10,7 +10,6 @@ import (
 func Run(httpPort int) {
 
 	r := gin.Default()
-
 	r.Static("/", "./dist")
 	r.MaxMultipartMemory = 8 << 20 // 8 MiB
 	v1 := r.Group("/v1")

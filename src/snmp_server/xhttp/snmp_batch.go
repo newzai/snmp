@@ -19,6 +19,7 @@ import (
 type snmpBatchData struct {
 	DeviceType string                 `json:"dev_type"`
 	ItemPath   string                 `json:"itempath"`
+	ItemIDs    []int                  `json:"itemids"`
 	OIDs       map[string]interface{} `json:"oids"`
 }
 
@@ -35,21 +36,41 @@ type tItemInfo struct {
 
 //supportBatch map value is default value
 var supportBatch = map[string]interface{}{
-	"k518_language_mode":         0,
-	"k518_http_mode":             0,
-	"k518_http_port":             80,
-	"k518_telnet_port":           23,
-	"k518_sip_local_port":        5060,
-	"k518_dtmf_relay_mode":       0,
-	"k518_codec_type_list":       "3 1 0 4 2",
-	"k518_hotline_enable":        0,
-	"k518_hotline_number":        "690",
-	"k518_hotline_account":       0,
-	"k518_microphone_volume":     6,
-	"k518_speaker_volume":        4,
-	"k518_hookon_wait_time":      10,
-	"k518_ring_style":            0,
-	"k518_ring_volume":           7,
+	//for KN518
+	"k518_http_mode":         0,
+	"k518_http_port":         80,
+	"k518_telnet_port":       23,
+	"k518_sip_local_port":    5060,
+	"k518_dtmf_relay_mode":   0,
+	"k518_codec_type_list":   "3 1 0 4 2",
+	"k518_hotline_enable":    0,
+	"k518_hotline_number":    "690",
+	"k518_hotline_account":   0,
+	"k518_microphone_volume": 6,
+	"k518_speaker_volume":    4,
+	"k518_hookon_wait_time":  10,
+	"k518_ring_style":        0,
+	"k518_ring_volume":       7,
+	//for KN519
+	"k519_language_mode":     0,
+	"k519_http_mode":         0,
+	"k519_http_port":         80,
+	"k519_telnet_port":       23,
+	"k519_sip_local_port":    5060,
+	"k519_dtmf_relay_mode":   0,
+	"k519_codec_type_list":   "3 1 0 4 2",
+	"k519_hotline_enable":    0,
+	"k518_language_mode":     0,
+	"k519_hotline_number":    "690",
+	"k519_hotline_account":   0,
+	"k519_video_mode":        0,
+	"k519_video_paytype":     107,
+	"k519_microphone_volume": 5,
+	"k519_speaker_volume":    4,
+	"k519_hookon_wait_time":  10,
+	"k519_ring_style":        0,
+	"k519_ring_volume":       7,
+	//for all device
 	"usl_reboot_device":          "reboot",
 	"usl_set_default":            "default",
 	"usl_ftp_server_ip":          "",
@@ -72,7 +93,21 @@ func snmpBatch(c *gin.Context) {
 	if !authToken(request.Token, c) {
 		return
 	}
-	terminals, err := model.GetTerminalByPathAndType(request.Data.ItemPath, request.Data.DeviceType, xdb.Engine)
+	var terminals []*model.Terminal
+	var err error
+	if len(request.Data.ItemIDs) > 0 {
+		for _, id := range request.Data.ItemIDs {
+			t, err := model.GetTerminalByID(id, xdb.Engine)
+			if err == nil && t != nil {
+				terminals = append(terminals, t)
+				seelog.Infof("id %d terminal %v", id, t)
+			}
+		}
+		seelog.Info("terminals:", terminals)
+	} else {
+		terminals, err = model.GetTerminalByPathAndType(request.Data.ItemPath, request.Data.DeviceType, xdb.Engine)
+	}
+
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"result": 1, "message": err.Error()})
 		return

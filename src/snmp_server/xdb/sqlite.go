@@ -28,6 +28,6 @@ func Init(showSQL bool) {
 
 	Engine.ShowSQL(showSQL)
 	EngineTask.ShowSQL(showSQL)
-	EngineWarning.ShowSQL(true)
+	EngineWarning.ShowSQL(showSQL)
 
 }

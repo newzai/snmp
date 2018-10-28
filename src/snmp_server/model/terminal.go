@@ -32,6 +32,7 @@ type Terminal struct {
 func (r *Terminal) IsOnline() bool {
 	now := time.Now()
 	duration := now.Sub(r.LastKeepalive)
+	seelog.Infof("%s duration: %d,  last %s, now %s", r.NTID, duration, r.LastKeepalive.String(), now.String())
 	if duration < time.Second*60 {
 		return true
 	}
@@ -88,7 +89,10 @@ func GetTerminalByID(id int, engin *xorm.Engine) (*Terminal, error) {
 
 	var t Terminal
 	t.ID = id
-	_, err := engin.Get(&t)
+	has, err := engin.Get(&t)
+	if !has {
+		return nil, fmt.Errorf("terminal (%d) not exist", id)
+	}
 	return &t, err
 }
 
@@ -118,10 +122,10 @@ func CreateTerminal(t *Terminal, engin *xorm.Engine) error {
 func UpdateTerminal(t *Terminal, keepalive bool, engine *xorm.Engine) error {
 	if keepalive {
 		affected, err := engine.Id(t.ID).Cols(terminalUpdateKeepaliveCols...).Update(t)
-		seelog.Info("update terminal affected:", affected)
+		seelog.Info("update  keepalive terminal affected :", affected, " error:", err)
 		return err
 	}
 	affected, err := engine.Id(t.ID).Cols(terminalUpdateCols...).Update(t)
-	seelog.Info("update terminal affected:", affected)
+	seelog.Info("update terminal affected:", affected, " error:", err)
 	return err
 }

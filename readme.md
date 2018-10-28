@@ -228,6 +228,7 @@ curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444"
     {
         "dev_type": "" --要批量配置的设备类型
         "itempath": "" -- 指定 zone path ，在该path下面的所有指定设备会被批量处理
+        "itemids": [id1,id2...], --优先，len(itemids) >0 忽略itempath
         "oids":
         {
             "oid1": int or str
@@ -336,7 +337,23 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 |挂机等待时间	|k518_hookon_wait_time  |           缺省：10  |   
 |铃声类型	|k518_ring_style     |              缺省：0    |
 |振铃音量	|k518_ring_volume     |             缺省：7     |
-
+|语言模式	|k519_language_mode    |            缺省：0      |                  //中文
+|http模式	|k519_http_mode       |             缺省：0     |                   //http模式
+|http端口	|k519_http_port       |             缺省：80   |
+|telnet端口	|k519_telnet_port        |          缺省：23   |
+|sip本地端口	|k519_sip_local_port       |        缺省：5060   |
+|二次拨号模式	|k519_dtmf_relay_mode    |          缺省：0        |                //2833模式
+|语音算法列表	|k519_codec_type_list     |         缺省："3 1 0 4 2"|
+|热线使能开关	|k519_hotline_enable      |         缺省：0       |                 //关闭
+|热线号码	|k519_hotline_number          |     缺省："690" |
+|热线账号	|k519_hotline_account          |    缺省：0   |
+|视频模式	|k519_video_mode	    	  |        缺省：0    |                    //720p
+|视频负载类型	|k519_video_paytype	       |   缺省：107       |               
+|麦克风音量	|k519_microphone_volume         |   缺省：6   |
+|扬声器音量	|k519_speaker_volume            |   缺省：4   |
+|挂机等待时间	|k519_hookon_wait_time       |      缺省：10  | 
+|铃声类型	|k519_ring_style                |   缺省：0  |
+|振铃音量	|k519_ring_volume                |  缺省：7   |
 
 # 7. modify_password  修改自己的用户名和密码
 - POST
