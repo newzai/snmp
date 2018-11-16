@@ -87,6 +87,7 @@ func login(c *gin.Context) {
 			"version":    globalvars.AppVersion,
 			"build_date": globalvars.AppBuildTime,
 			"git_hash":   globalvars.AppGitHash,
+			"go_version": globalvars.GoVersion,
 		},
 	}
 	c.JSON(http.StatusOK, result)
