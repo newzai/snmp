@@ -3,6 +3,7 @@ package xhttp
 import (
 	"fmt"
 	"net/http"
+	"snmp_server/globalvars"
 	"snmp_server/model"
 	"snmp_server/sessions"
 	"snmp_server/xdb"
@@ -81,8 +82,11 @@ func login(c *gin.Context) {
 		"result":  0,
 		"message": "OK",
 		"data": gin.H{
-			"token":    token,
-			"userinfo": info,
+			"token":      token,
+			"userinfo":   info,
+			"version":    globalvars.AppVersion,
+			"build_date": globalvars.AppBuildTime,
+			"git_hash":   globalvars.AppGitHash,
 		},
 	}
 	c.JSON(http.StatusOK, result)

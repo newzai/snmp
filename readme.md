@@ -1,31 +1,43 @@
 <!-- TOC -->
 
-- [1. common](#1-common)
-- [2. login](#2-login)
-- [3. logout](#3-logout)
-- [4. getitem](#4-getitem)
-- [5. SNMP 配置](#5-snmp-配置)
-    - [5.1. 获取配置文件](#51-获取配置文件)
-- [6. SNMP 批量配置](#6-snmp-批量配置)
-    - [6.1. 批量FTP升级](#61-批量ftp升级)
-    - [6.2. 批量重启](#62-批量重启)
-    - [6.3. 批量恢复出厂设置](#63-批量恢复出厂设置)
-    - [6.4. 批量备份配置文件](#64-批量备份配置文件)
-    - [6.5. 批量配置](#65-批量配置)
-- [7. modify_password  修改自己的用户名和密码](#7-modify_password--修改自己的用户名和密码)
-- [8. getusers  -- for admin](#8-getusers-----for-admin)
-- [9. create_user -- for admin](#9-create_user----for-admin)
-- [10. delete_user -- for admin](#10-delete_user----for-admin)
-- [11. modify_user -- for admin](#11-modify_user----for-admin)
-- [12. 固件管理  -- for admin](#12-固件管理-----for-admin)
-    - [12.1. 固件查询](#121-固件查询)
-    - [12.2. 固件上传](#122-固件上传)
-- [13. FTP 固件升级](#13-ftp-固件升级)
-    - [13.1. ftp 升级](#131-ftp-升级)
-    - [13.2. ftp 升级状态查询](#132-ftp-升级状态查询)
+- [1. build](#1-build)
+- [2. common](#2-common)
+- [3. login](#3-login)
+- [4. logout](#4-logout)
+- [5. getitem](#5-getitem)
+- [6. SNMP 配置](#6-snmp-配置)
+    - [6.1. 获取配置文件](#61-获取配置文件)
+- [7. SNMP 批量配置](#7-snmp-批量配置)
+    - [7.1. 批量FTP升级](#71-批量ftp升级)
+    - [7.2. 批量重启](#72-批量重启)
+    - [7.3. 批量恢复出厂设置](#73-批量恢复出厂设置)
+    - [7.4. 批量备份配置文件](#74-批量备份配置文件)
+    - [7.5. 批量配置](#75-批量配置)
+- [8. modify_password  修改自己的用户名和密码](#8-modify_password--修改自己的用户名和密码)
+- [9. getusers  -- for admin](#9-getusers-----for-admin)
+- [10. create_user -- for admin](#10-create_user----for-admin)
+- [11. delete_user -- for admin](#11-delete_user----for-admin)
+- [12. modify_user -- for admin](#12-modify_user----for-admin)
+- [13. 固件管理  -- for admin](#13-固件管理-----for-admin)
+    - [13.1. 固件查询](#131-固件查询)
+    - [13.2. 固件上传](#132-固件上传)
+- [14. FTP 固件升级](#14-ftp-固件升级)
+    - [14.1. ftp 升级](#141-ftp-升级)
+    - [14.2. ftp 升级状态查询](#142-ftp-升级状态查询)
 
 <!-- /TOC -->
-# 1. common
+
+# 1. build 
+
+```bash
+export GOPATH=`pwd`
+cd src/snmp_server
+make
+
+./snmp_server -version
+```
+
+# 2. common
 - userinfo 
 ```json
 {
@@ -55,7 +67,7 @@
             
 }
 ```
-# 2. login 
+# 3. login 
 - POST
 - URL v1/login
 - Body
@@ -82,7 +94,7 @@
 curl -X POST -H 'content-type: application/json' -d '{"username":"admin", "password":"123456"}' http://118.126.91.183:9192/v1/login
 
 
-# 3. logout 
+# 4. logout 
 - POST
 - URL v1/logout
 - Body
@@ -99,7 +111,7 @@ curl -X POST -H 'content-type: application/json' -d '{"username":"admin", "passw
 }
 ```
 
-# 4. getitem  
+# 5. getitem  
 
 curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444", "data":{"itemid":1, "itemtype":1}}' http://127.0.0.1:9192/v1/getitem
 
@@ -138,7 +150,7 @@ curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444"
 curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444", "data":{"itemid":1, "itemtype":1}}' http://118.126.91.183:9192/v1/getitem
 
     
-# 5. SNMP 配置
+# 6. SNMP 配置
 
 - POST
 - URL v1/snmp
@@ -183,7 +195,7 @@ curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444"
 
  curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444", "data":{"snmp_type":"get", "itemid":4,"index":1,"oids":{"software_version":"","wan_link_status":0,"lan_link_status":0}}}'  http://118.126.91.183:9192/v1/snmp
  
-## 5.1. 获取配置文件 
+## 6.1. 获取配置文件 
 - SNMP 配置更新之前，可以获取配置文件列表
 - POST 
 - URL v1/get_config_file
@@ -216,7 +228,7 @@ curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444"
 - 把获取到的files的 任意一个文件名称放到 oids的字段 usl_ftp_restore_cfg_file_name 即可
 
 
-# 6. SNMP 批量配置
+# 7. SNMP 批量配置
 - 说明，只能批量配置，归属自己的设备
 - POST
 - URL v1/snmp_batch
@@ -265,7 +277,7 @@ curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444"
     }
 }
 ```
-## 6.1. 批量FTP升级
+## 7.1. 批量FTP升级
 包含ftp升级相关参数 
 
 ```json
@@ -282,7 +294,7 @@ curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444"
 }
 ```  
             
-## 6.2. 批量重启
+## 7.2. 批量重启
 ```json
 {
     "oids":
@@ -292,7 +304,7 @@ curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444"
 }
 ```
 
-## 6.3. 批量恢复出厂设置
+## 7.3. 批量恢复出厂设置
 ```json
 {
     "oids":
@@ -301,7 +313,7 @@ curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444"
     }
 }
 ```
-## 6.4. 批量备份配置文件
+## 7.4. 批量备份配置文件
 ```json
 {
     "oids":
@@ -316,7 +328,7 @@ curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444"
 ```  
 
 usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名称为 设备的ntid_YYmmDD_HHMMSS.cfg
-## 6.5. 批量配置
+## 7.5. 批量配置
 
 以下列出的字段支持批量配置，可以出现在 请求消息 的oids参数中；  
 
@@ -355,7 +367,7 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 |铃声类型	|k519_ring_style                |   缺省：0  |
 |振铃音量	|k519_ring_volume                |  缺省：7   |
 
-# 7. modify_password  修改自己的用户名和密码
+# 8. modify_password  修改自己的用户名和密码
 - POST
 - URL v1/modify_password
 - Body
@@ -378,7 +390,7 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 }
 ```
 
-# 8. getusers  -- for admin 
+# 9. getusers  -- for admin 
 - POST
 - URL v1/getusers
 - Body
@@ -410,7 +422,7 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
     }
 }
 ```
-# 9. create_user -- for admin
+# 10. create_user -- for admin
 - POST 
 - URL  v1/create_user
 - Body
@@ -433,7 +445,7 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
     "message": "OK"     -- or other error message
 }
 ```
-# 10. delete_user -- for admin
+# 11. delete_user -- for admin
 - POST
 - URL v1/delete_user
 - Body
@@ -454,7 +466,7 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 }
 ```
 
-# 11. modify_user -- for admin 
+# 12. modify_user -- for admin 
 - POST
 - URL v1/modify_user
 - Body
@@ -478,8 +490,8 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 }
 ```
 
-# 12. 固件管理  -- for admin
-## 12.1. 固件查询
+# 13. 固件管理  -- for admin
+## 13.1. 固件查询
 
 - POST
 - URL  v1/get_all_hardware
@@ -510,7 +522,7 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 }
 ```
 
-## 12.2. 固件上传
+## 13.2. 固件上传
 
 通过  From 表单上传  
 
@@ -518,8 +530,8 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 
 
 
-# 13. FTP 固件升级
-## 13.1. ftp 升级
+# 14. FTP 固件升级
+## 14.1. ftp 升级
 
 - 使用 snmp set命令，参考 snmp接口；需要包含以下字段
     usl_ftp_server_ip  
@@ -550,7 +562,7 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 	}
 }
 ```
-## 13.2. ftp 升级状态查询
+## 14.2. ftp 升级状态查询
 
 - POST 
 - URL /v1/ftp_upgrade_status

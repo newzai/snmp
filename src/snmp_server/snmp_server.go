@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"os/user"
 	"reflect"
@@ -29,12 +30,19 @@ var showSQL = flag.Bool("show_sql", false, "-show_sql=false|true")
 var ftpUser = flag.String("ftp_user", "uftp", "-ftp_user=uftp")
 var ftpGroup = flag.String("ftp_group", "uftp", "-ftp_user=uftp")
 var help = flag.Bool("help", false, "-help=true")
+var version = flag.Bool("version", false, "-version")
 
 func main() {
 	flag.Parse()
 	if *help {
 		flag.Usage()
 		return
+	}
+	if *version {
+		fmt.Printf("Version: %v\n", globalvars.AppVersion)
+		fmt.Printf("Git Hash: %v\n", globalvars.AppGitHash)
+		fmt.Printf("Build Time: %v\n", globalvars.AppBuildTime)
+		os.Exit(0)
 	}
 	globalvars.FTPDir = *ftpDir
 	globalvars.FTPUser = *ftpUser
