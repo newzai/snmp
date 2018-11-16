@@ -42,6 +42,7 @@ func main() {
 		fmt.Printf("Version: %v\n", globalvars.AppVersion)
 		fmt.Printf("Git Hash: %v\n", globalvars.AppGitHash)
 		fmt.Printf("Build Time: %v\n", globalvars.AppBuildTime)
+		fmt.Printf("Go Version: %v\n", globalvars.GoVersion)
 		os.Exit(0)
 	}
 	globalvars.FTPDir = *ftpDir
