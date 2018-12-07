@@ -30,6 +30,8 @@ func Run(httpPort int) {
 		v1.POST("/get_config_file", getConfigFile)
 		v1.POST("/get_warnings", getWarning)
 		v1.POST("/warning_test", warningTest)
+		v1.POST("/get_commands", getCommands)
+		v1.POST("/run_command", runCommand)
 	}
 
 	r.Run(fmt.Sprintf(":%d", httpPort))

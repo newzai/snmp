@@ -24,6 +24,9 @@
 - [14. FTP 固件升级](#14-ftp-固件升级)
     - [14.1. ftp 升级](#141-ftp-升级)
     - [14.2. ftp 升级状态查询](#142-ftp-升级状态查询)
+- [15. linux 命令](#15-linux-命令)
+    - [15.1. 获取命令列接口](#151-获取命令列接口)
+    - [15.2. 执行命令](#152-执行命令)
 
 <!-- /TOC -->
 
@@ -598,5 +601,83 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
     itempath: string
     dev_type: string
     result :
+}
+```
+
+
+# 15. linux 命令
+
+- 为了安全，只能执行指定的系统命令。相关系统命令放在与snmp_server 相同的目录 command.txt文件中。
+- command.txt 文件每行一个命令，每一行数据保护三个字段， index:name:command
+- index 必须唯一
+- name 为名称，用于web页面展示
+- command具体执行的内容，对web 和用户透明。
+
+## 15.1. 获取命令列接口
+
+- POST
+- URL : /v1/get_commands
+- Body 
+```json
+{
+	"token":"8008fd2f-3ccd-4582-8756-ae3d13ea7f77"
+}
+```
+
+- Response
+```json
+{
+    "data": {
+        "commands": {
+            "1": "ps",
+            "2": "ls",
+            "3": "ping",
+            "4": "test",
+            "5": "test"
+        },
+        "hash": "6688f785308916906ccce2095814528a"
+    },
+    "message": "OK",
+    "result": 0
+}
+```
+
+- 把Response结果的 commands 展示在web界面上，属于所有支持的命令,
+- KEY 为 index
+- Value 为 name
+- get_commands 的列表，后台修改后，会导致变化，表现的结果就是hash值不一样。
+
+## 15.2. 执行命令 
+- POST
+- URL : /v1/run_command
+- Body
+```json
+{
+	"token":"952f2cdb-b308-4018-be0c-a7ea196f1f7f",
+	"data":{
+		"command": 3,
+		"hash":"6688f785308916906ccce2095814528a"
+	}
+}
+```
+- Response 
+```json
+{
+    "data": {
+        "output": "PING 127.0.0.1 (127.0.0.1) 56(84) bytes of data.\n64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.046 ms\n64 bytes from 127.0.0.1: icmp_seq=2 ttl=64 time=0.031 ms\n64 bytes from 127.0.0.1: icmp_seq=3 ttl=64 time=0.033 ms\n64 bytes from 127.0.0.1: icmp_seq=4 ttl=64 time=0.036 ms\n\n--- 127.0.0.1 ping statistics ---\n4 packets transmitted, 4 received, 0% packet loss, time 2997ms\nrtt min/avg/max/mdev = 0.031/0.036/0.046/0.008 ms\n"
+    },
+    "message": "OK",
+    "result": 0
+}
+```
+
+- command 的值为 3， 对比 get_commands 的返回结果得知执行ping命令
+- hash get_commands 返回的hash，需要重新带回去，服务器会校验，如果hash值不匹配返回错误，需要重新获取get_commands,因此后端的command.txt 文件被修改了。
+
+- Response hash not match
+```json
+{
+    "message": "hash not match, refresh commands list",
+    "result": 2
 }
 ```
