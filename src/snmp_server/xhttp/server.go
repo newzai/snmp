@@ -2,12 +2,36 @@ package xhttp
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
+
+	"snmp_server/asset"
 
 	"github.com/gin-gonic/gin"
 )
 
 //Run run http server
 func Run(httpPort int) {
+
+	isSuccess := true
+	dirs := []string{"dist"} // 设置需要释放的目录
+	for _, dir := range dirs {
+		fmt.Println("remove ", filepath.Join("./", dir))
+		os.RemoveAll(filepath.Join("./", dir))
+	}
+	for _, dir := range dirs {
+		// 解压dir目录到当前目录
+		if err := asset.RestoreAssets("./", dir); err != nil {
+			isSuccess = false
+			fmt.Println("RestoreAssets error: ", filepath.Join("./", dir), " ", err.Error())
+			break
+		}
+	}
+	if !isSuccess {
+		for _, dir := range dirs {
+			os.RemoveAll(filepath.Join("./", dir))
+		}
+	}
 
 	r := gin.Default()
 	r.Static("/", "./dist")

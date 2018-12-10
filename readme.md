@@ -27,6 +27,10 @@
 - [15. linux 命令](#15-linux-命令)
     - [15.1. 获取命令列接口](#151-获取命令列接口)
     - [15.2. 执行命令](#152-执行命令)
+- [16. 内嵌web](#16-内嵌web)
+    - [16.1. dist.zip](#161-distzip)
+    - [16.2. build 内嵌资源 asset.go 文件](#162-build-内嵌资源-assetgo-文件)
+    - [16.3. go-bindata 安装 (执行一次即可)](#163-go-bindata-安装-执行一次即可)
 
 <!-- /TOC -->
 
@@ -681,3 +685,28 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
     "result": 2
 }
 ```
+
+
+# 16. 内嵌web
+
+## 16.1. dist.zip 
+
+- dist.zip 文件放到 src/snmp_server目录
+- unzip dist.zip 解压到 src/snmp_server目录， 出现 src/snmp_server/dist 目录 
+
+## 16.2. build 内嵌资源 asset.go 文件
+
+```bash
+cd src/snmp_server 
+go-bindata -o asset/asset.go -pkg=asset dist/...
+```
+
+## 16.3. go-bindata 安装 (执行一次即可)
+
+```bash
+export GOPATH=`pwd` #在snmp 目录设置
+go get -u github.com/jteeuwen/go-bindata/...
+```
+
+- 安装完成后，把 `pwd`/bin 目录加入 PATH目录或者把 `pwd`/bin/go-bindata 文件复制到 /usr/local/bin目录下面
+
