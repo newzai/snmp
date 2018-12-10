@@ -18,6 +18,7 @@ import (
 	"xconf"
 
 	"github.com/cihub/seelog"
+	"github.com/gin-gonic/gin"
 
 	_ "snmp_server/mibs"
 	_ "snmp_server/xtrap/xtraphandler"
@@ -31,6 +32,7 @@ var ftpUser = flag.String("ftp_user", "uftp", "-ftp_user=uftp")
 var ftpGroup = flag.String("ftp_group", "uftp", "-ftp_user=uftp")
 var help = flag.Bool("help", false, "-help=true")
 var version = flag.Bool("version", false, "-version")
+var debug = flag.Bool("debug", false, "-debug=true|false")
 
 func main() {
 	flag.Parse()
@@ -44,6 +46,11 @@ func main() {
 		fmt.Printf("Build Time: %v\n", globalvars.AppBuildTime)
 		fmt.Printf("Go Version: %v\n", globalvars.GoVersion)
 		os.Exit(0)
+	}
+	if *debug {
+		gin.SetMode(gin.DebugMode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
 	}
 	globalvars.FTPDir = *ftpDir
 	globalvars.FTPUser = *ftpUser
