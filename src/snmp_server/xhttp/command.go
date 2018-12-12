@@ -15,6 +15,7 @@ import (
 
 type runCommandData struct {
 	Command int    `json:"command"`
+	Params  string `json:"params"`
 	Hash    string `json:"hash"`
 }
 type runCommandRequest struct {
@@ -47,6 +48,16 @@ func runCommand(c *gin.Context) {
 	commandParams := strings.Split(commandData, " ")
 	commandName := commandParams[0]
 	commandParams = commandParams[1:]
+	if len(request.Data.Params) > 0 {
+		userParams := strings.Split(request.Data.Params, " ")
+		for _, param := range userParams {
+			p := strings.TrimSpace(param)
+			if len(p) > 0 {
+				commandParams = append(commandParams, p)
+			}
+		}
+	}
+
 	command := exec.Command(commandName, commandParams...)
 
 	output, err := command.CombinedOutput()
