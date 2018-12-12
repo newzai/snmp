@@ -44,6 +44,10 @@ make
 ./snmp_server -version
 ```
 
+- make debug or make release
+    - make debug == make
+    - make release 用于发布版本，会在git上打tag
+
 # 2. common
 - userinfo 
 ```json
