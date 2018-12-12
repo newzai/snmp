@@ -6,11 +6,16 @@ import (
 	"os"
 	"os/exec"
 	"snmp_server/globalvars"
+	"strings"
 
 	"github.com/cihub/seelog"
 
 	"github.com/gin-gonic/gin"
 )
+
+func isUpgrade(devType string) bool {
+	return devType == "upgrade"
+}
 
 func uploadHardware(c *gin.Context) {
 	devType := c.PostForm("dev_type")
@@ -18,6 +23,21 @@ func uploadHardware(c *gin.Context) {
 	file, err := c.FormFile("file")
 	if err != nil {
 		c.String(http.StatusOK, fmt.Sprintf("get form err: %s", err.Error()))
+		return
+	}
+
+	if isUpgrade(devType) {
+		if !strings.HasSuffix(file.Filename, "tar") {
+			c.String(http.StatusOK, "not tar file")
+		}
+		//snmp_server 自身升级.
+		filename := globalvars.UpgradeDir + "/snmp.tar"
+		os.Remove(filename)
+		if err := c.SaveUploadedFile(file, filename); err != nil {
+			c.String(http.StatusOK, fmt.Sprintf("upload file err: %s", err.Error()))
+			return
+		}
+		c.String(http.StatusOK, fmt.Sprintf("File %s uploaded successfully with fields .", file.Filename))
 		return
 	}
 

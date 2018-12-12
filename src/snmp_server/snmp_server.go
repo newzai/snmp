@@ -24,6 +24,7 @@ import (
 	_ "snmp_server/xtrap/xtraphandler"
 )
 
+var upgradeDir = flag.String("upgradedir", "/home/klsnmp/upgrade", "-upgradedir=/home/klsnmp/upgrade")
 var ftpDir = flag.String("ftpdir", "/home/klsnmp/ftpfile/", "-ftpdir=/home/klsnmp/ftpfile")
 var snmpPort = flag.Uint("snmp_port", 162, "-snmp_port=162")
 var httpPort = flag.Int("http_port", 9192, "-http_port=9192")
@@ -52,9 +53,11 @@ func main() {
 	} else {
 		gin.SetMode(gin.ReleaseMode)
 	}
+
 	globalvars.FTPDir = *ftpDir
 	globalvars.FTPUser = *ftpUser
 	globalvars.FTPGroup = *ftpGroup
+	globalvars.UpgradeDir = *upgradeDir
 
 	// start ftp dir, user, group check
 	ftpCheck()

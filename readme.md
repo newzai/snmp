@@ -48,6 +48,9 @@ make
     - make debug == make
     - make release 用于发布版本，会在git上打tag
 
+- version: 修改 src/snmp_server/VERSION 文件内容 
+
+
 # 2. common
 - userinfo 
 ```json
@@ -537,7 +540,8 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 
 通过  From 表单上传  
 
-
+- url : /v1/upload_hardware
+- dev_type == upgrade 时，为 snmp_server的升级。上传文件必须为tar文件。并且会被强制修改为 snmp.tar文件.
 
 
 
@@ -714,4 +718,3 @@ go get -u github.com/jteeuwen/go-bindata/...
 ```
 
 - 安装完成后，把 `pwd`/bin 目录加入 PATH目录或者把 `pwd`/bin/go-bindata 文件复制到 /usr/local/bin目录下面
-

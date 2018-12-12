@@ -15,7 +15,7 @@ release: ## Build the binary
 
 debug:
 	go build -v -a  -ldflags ${LDFLAGS} -o ${BINARY_NAME} snmp_server.go
-
+ 
 clean: ## Clean this build
 	rm -rf ${BINARY_NAME}
 	rm -rf build

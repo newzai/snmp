@@ -32,7 +32,7 @@ func Register(r *gin.Engine, prefixOptions ...string) {
 		prefixRouter.GET("/cmdline", pprofHandler(pprof.Cmdline))
 		prefixRouter.GET("/profile", pprofHandler(pprof.Profile))
 		prefixRouter.POST("/symbol", pprofHandler(pprof.Symbol))
-		prefixRouter.GET("/symbol", pprofHandler(pprof.Symbol))
+		//prefixRouter.GET("/symbol", pprofHandler(pprof.Symbol))
 		prefixRouter.GET("/trace", pprofHandler(pprof.Trace))
 		prefixRouter.GET("/block", pprofHandler(pprof.Handler("block").ServeHTTP))
 		prefixRouter.GET("/goroutine", pprofHandler(pprof.Handler("goroutine").ServeHTTP))
