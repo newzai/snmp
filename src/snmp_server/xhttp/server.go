@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"snmp_server/asset"
 
+	"github.com/gin-contrib/pprof"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,6 +17,7 @@ func Run(httpPort int) {
 	restoreAssets()
 
 	r := gin.Default()
+	pprof.Register(r)
 	r.Static("/", "./dist")
 	r.MaxMultipartMemory = 8 << 20 // 8 MiB
 	v1 := r.Group("/v1")
