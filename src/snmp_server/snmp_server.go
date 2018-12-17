@@ -26,8 +26,6 @@ import (
 
 var upgradeDir = flag.String("upgradedir", "/home/klsnmp/upgrade", "-upgradedir=/home/klsnmp/upgrade")
 var ftpDir = flag.String("ftpdir", "/home/klsnmp/ftpfile/", "-ftpdir=/home/klsnmp/ftpfile")
-var snmpPort = flag.Uint("snmp_port", 162, "-snmp_port=162")
-var httpPort = flag.Int("http_port", 9192, "-http_port=9192")
 var showSQL = flag.Bool("show_sql", false, "-show_sql=false|true")
 var ftpUser = flag.String("ftp_user", "uftp", "-ftp_user=uftp")
 var ftpGroup = flag.String("ftp_group", "uftp", "-ftp_user=uftp")
@@ -69,9 +67,9 @@ func main() {
 	model.InitDatabase(xdb.Engine)
 	xtask.InitDatabase(xdb.EngineTask)
 	xwarning.InitDatabase(xdb.EngineWarning)
-	go xhttp.Run(*httpPort)
+	go xhttp.Run(globalvars.Default.WebPort)
 
-	xsnmp.Default.Start("0.0.0.0", uint16(*snmpPort), xtrap.OnTrapHandler)
+	xsnmp.Default.Start("0.0.0.0", uint16(globalvars.Default.SnmpPort), xtrap.OnTrapHandler)
 }
 
 func ftpCheck() {

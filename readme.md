@@ -1,36 +1,41 @@
 <!-- TOC -->
 
 - [1. build](#1-build)
-- [2. common](#2-common)
-- [3. login](#3-login)
-- [4. logout](#4-logout)
-- [5. getitem](#5-getitem)
-- [6. SNMP 配置](#6-snmp-配置)
-    - [6.1. 获取配置文件](#61-获取配置文件)
-- [7. SNMP 批量配置](#7-snmp-批量配置)
-    - [7.1. 批量FTP升级](#71-批量ftp升级)
-    - [7.2. 批量重启](#72-批量重启)
-    - [7.3. 批量恢复出厂设置](#73-批量恢复出厂设置)
-    - [7.4. 批量备份配置文件](#74-批量备份配置文件)
-    - [7.5. 批量配置](#75-批量配置)
-- [8. modify_password  修改自己的用户名和密码](#8-modify_password--修改自己的用户名和密码)
-- [9. getusers  -- for admin](#9-getusers-----for-admin)
-- [10. create_user -- for admin](#10-create_user----for-admin)
-- [11. delete_user -- for admin](#11-delete_user----for-admin)
-- [12. modify_user -- for admin](#12-modify_user----for-admin)
-- [13. 固件管理  -- for admin](#13-固件管理-----for-admin)
-    - [13.1. 固件查询](#131-固件查询)
-    - [13.2. 固件上传](#132-固件上传)
-- [14. FTP 固件升级](#14-ftp-固件升级)
-    - [14.1. ftp 升级](#141-ftp-升级)
-    - [14.2. ftp 升级状态查询](#142-ftp-升级状态查询)
-- [15. linux 命令](#15-linux-命令)
-    - [15.1. 获取命令列接口](#151-获取命令列接口)
-    - [15.2. 执行命令](#152-执行命令)
-- [16. 内嵌web](#16-内嵌web)
-    - [16.1. dist.zip](#161-distzip)
-    - [16.2. build 内嵌资源 asset.go 文件](#162-build-内嵌资源-assetgo-文件)
-    - [16.3. go-bindata 安装 (执行一次即可)](#163-go-bindata-安装-执行一次即可)
+- [2. 内嵌web](#2-内嵌web)
+    - [2.1. dist.zip](#21-distzip)
+    - [2.2. build 内嵌资源 asset.go 文件](#22-build-内嵌资源-assetgo-文件)
+    - [2.3. go-bindata 安装 (执行一次即可)](#23-go-bindata-安装-执行一次即可)
+- [3. HTTP 接口](#3-http-接口)
+    - [3.1. common](#31-common)
+    - [3.2. login](#32-login)
+    - [3.3. logout](#33-logout)
+    - [3.4. getitem](#34-getitem)
+    - [3.5. SNMP 配置](#35-snmp-配置)
+        - [3.5.1. 获取配置文件](#351-获取配置文件)
+    - [3.6. SNMP 批量配置](#36-snmp-批量配置)
+        - [3.6.1. 批量FTP升级](#361-批量ftp升级)
+        - [3.6.2. 批量重启](#362-批量重启)
+        - [3.6.3. 批量恢复出厂设置](#363-批量恢复出厂设置)
+        - [3.6.4. 批量备份配置文件](#364-批量备份配置文件)
+        - [3.6.5. 批量配置](#365-批量配置)
+    - [3.7. SNMP系统用户管理](#37-snmp系统用户管理)
+        - [3.7.1. modify_password  修改自己的用户名和密码](#371-modify_password--修改自己的用户名和密码)
+        - [3.7.2. getusers  -- for admin](#372-getusers-----for-admin)
+        - [3.7.3. create_user -- for admin](#373-create_user----for-admin)
+        - [3.7.4. delete_user -- for admin](#374-delete_user----for-admin)
+        - [3.7.5. modify_user -- for admin](#375-modify_user----for-admin)
+    - [3.8. 固件管理  -- for admin](#38-固件管理-----for-admin)
+        - [3.8.1. 固件查询](#381-固件查询)
+        - [3.8.2. 固件上传](#382-固件上传)
+    - [3.9. FTP 固件升级](#39-ftp-固件升级)
+        - [3.9.1. ftp 升级](#391-ftp-升级)
+        - [3.9.2. ftp 升级状态查询](#392-ftp-升级状态查询)
+    - [3.10. linux 命令](#310-linux-命令)
+        - [3.10.1. 获取命令列接口](#3101-获取命令列接口)
+        - [3.10.2. 执行命令](#3102-执行命令)
+    - [3.11. SNMP Server 配置](#311-snmp-server-配置)
+        - [3.11.1. 获取配置](#3111-获取配置)
+        - [3.11.2. 设置配置](#3112-设置配置)
 
 <!-- /TOC -->
 
@@ -51,7 +56,31 @@ make
 - version: 修改 src/snmp_server/VERSION 文件内容 
 
 
-# 2. common
+# 2. 内嵌web
+
+## 2.1. dist.zip 
+
+- dist.zip 文件放到 src/snmp_server目录
+- unzip dist.zip 解压到 src/snmp_server目录， 出现 src/snmp_server/dist 目录 
+
+## 2.2. build 内嵌资源 asset.go 文件
+
+```bash
+cd src/snmp_server 
+go-bindata -o asset/asset.go -pkg=asset dist/...
+```
+
+## 2.3. go-bindata 安装 (执行一次即可)
+
+```bash
+export GOPATH=`pwd` #在snmp 目录设置
+go get -u github.com/jteeuwen/go-bindata/...
+```
+
+- 安装完成后，把 `pwd`/bin 目录加入 PATH目录或者把 `pwd`/bin/go-bindata 文件复制到 /usr/local/bin目录下面
+
+# 3. HTTP 接口
+## 3.1. common
 - userinfo 
 ```json
 {
@@ -81,7 +110,7 @@ make
             
 }
 ```
-# 3. login 
+## 3.2. login 
 - POST
 - URL v1/login
 - Body
@@ -108,7 +137,7 @@ make
 curl -X POST -H 'content-type: application/json' -d '{"username":"admin", "password":"123456"}' http://118.126.91.183:9192/v1/login
 
 
-# 4. logout 
+## 3.3. logout 
 - POST
 - URL v1/logout
 - Body
@@ -125,7 +154,7 @@ curl -X POST -H 'content-type: application/json' -d '{"username":"admin", "passw
 }
 ```
 
-# 5. getitem  
+## 3.4. getitem  
 
 curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444", "data":{"itemid":1, "itemtype":1}}' http://127.0.0.1:9192/v1/getitem
 
@@ -164,7 +193,7 @@ curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444"
 curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444", "data":{"itemid":1, "itemtype":1}}' http://118.126.91.183:9192/v1/getitem
 
     
-# 6. SNMP 配置
+## 3.5. SNMP 配置
 
 - POST
 - URL v1/snmp
@@ -209,7 +238,7 @@ curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444"
 
  curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444", "data":{"snmp_type":"get", "itemid":4,"index":1,"oids":{"software_version":"","wan_link_status":0,"lan_link_status":0}}}'  http://118.126.91.183:9192/v1/snmp
  
-## 6.1. 获取配置文件 
+### 3.5.1. 获取配置文件 
 - SNMP 配置更新之前，可以获取配置文件列表
 - POST 
 - URL v1/get_config_file
@@ -242,7 +271,7 @@ curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444"
 - 把获取到的files的 任意一个文件名称放到 oids的字段 usl_ftp_restore_cfg_file_name 即可
 
 
-# 7. SNMP 批量配置
+## 3.6. SNMP 批量配置
 - 说明，只能批量配置，归属自己的设备
 - POST
 - URL v1/snmp_batch
@@ -291,7 +320,7 @@ curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444"
     }
 }
 ```
-## 7.1. 批量FTP升级
+### 3.6.1. 批量FTP升级
 包含ftp升级相关参数 
 
 ```json
@@ -308,7 +337,7 @@ curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444"
 }
 ```  
             
-## 7.2. 批量重启
+### 3.6.2. 批量重启
 ```json
 {
     "oids":
@@ -318,7 +347,7 @@ curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444"
 }
 ```
 
-## 7.3. 批量恢复出厂设置
+### 3.6.3. 批量恢复出厂设置
 ```json
 {
     "oids":
@@ -327,7 +356,7 @@ curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444"
     }
 }
 ```
-## 7.4. 批量备份配置文件
+### 3.6.4. 批量备份配置文件
 ```json
 {
     "oids":
@@ -342,7 +371,7 @@ curl -X POST -H 'content-type: application/json' -d '{"token":"111-222-333-4444"
 ```  
 
 usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名称为 设备的ntid_YYmmDD_HHMMSS.cfg
-## 7.5. 批量配置
+### 3.6.5. 批量配置
 
 以下列出的字段支持批量配置，可以出现在 请求消息 的oids参数中；  
 
@@ -381,7 +410,9 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 |铃声类型	|k519_ring_style                |   缺省：0  |
 |振铃音量	|k519_ring_volume                |  缺省：7   |
 
-# 8. modify_password  修改自己的用户名和密码
+
+## 3.7. SNMP系统用户管理
+### 3.7.1. modify_password  修改自己的用户名和密码
 - POST
 - URL v1/modify_password
 - Body
@@ -404,7 +435,7 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 }
 ```
 
-# 9. getusers  -- for admin 
+### 3.7.2. getusers  -- for admin 
 - POST
 - URL v1/getusers
 - Body
@@ -436,7 +467,7 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
     }
 }
 ```
-# 10. create_user -- for admin
+### 3.7.3. create_user -- for admin
 - POST 
 - URL  v1/create_user
 - Body
@@ -459,7 +490,7 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
     "message": "OK"     -- or other error message
 }
 ```
-# 11. delete_user -- for admin
+### 3.7.4. delete_user -- for admin
 - POST
 - URL v1/delete_user
 - Body
@@ -480,7 +511,7 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 }
 ```
 
-# 12. modify_user -- for admin 
+### 3.7.5. modify_user -- for admin 
 - POST
 - URL v1/modify_user
 - Body
@@ -504,8 +535,8 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 }
 ```
 
-# 13. 固件管理  -- for admin
-## 13.1. 固件查询
+## 3.8. 固件管理  -- for admin
+### 3.8.1. 固件查询
 
 - POST
 - URL  v1/get_all_hardware
@@ -536,7 +567,7 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 }
 ```
 
-## 13.2. 固件上传
+### 3.8.2. 固件上传
 
 通过  From 表单上传  
 
@@ -545,8 +576,8 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 
 
 
-# 14. FTP 固件升级
-## 14.1. ftp 升级
+## 3.9. FTP 固件升级
+### 3.9.1. ftp 升级
 
 - 使用 snmp set命令，参考 snmp接口；需要包含以下字段
     usl_ftp_server_ip  
@@ -577,7 +608,7 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 	}
 }
 ```
-## 14.2. ftp 升级状态查询
+### 3.9.2. ftp 升级状态查询
 
 - POST 
 - URL /v1/ftp_upgrade_status
@@ -617,7 +648,7 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 ```
 
 
-# 15. linux 命令
+## 3.10. linux 命令
 
 - 为了安全，只能执行指定的系统命令。相关系统命令放在与snmp_server 相同的目录 command.txt文件中。
 - command.txt 文件每行一个命令，每一行数据保护三个字段， index:name:command
@@ -625,7 +656,7 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 - name 为名称，用于web页面展示
 - command具体执行的内容，对web 和用户透明。
 
-## 15.1. 获取命令列接口
+### 3.10.1. 获取命令列接口
 
 - POST
 - URL : /v1/get_commands
@@ -640,14 +671,19 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 ```json
 {
     "data": {
-        "commands": {
-            "1": "ps",
-            "2": "ls",
-            "3": "ping",
-            "4": "test",
-            "5": "test"
-        },
-        "hash": "6688f785308916906ccce2095814528a"
+        "commands": [
+            "ls",
+            "pwd",
+            "cd",
+            "date",
+            "df",
+            "du",
+            "reboot",
+            "ifconfig",
+            "netstat",
+            "ping",
+            "ps"
+        ]
     },
     "message": "OK",
     "result": 0
@@ -659,17 +695,16 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 - Value 为 name
 - get_commands 的列表，后台修改后，会导致变化，表现的结果就是hash值不一样。
 
-## 15.2. 执行命令 
+### 3.10.2. 执行命令 
 - POST
 - URL : /v1/run_command
 - Body
 ```json
 {
-	"token":"952f2cdb-b308-4018-be0c-a7ea196f1f7f",
+	"token":"da5fddbb-19b4-4397-abdd-ce986e260165",
 	"data":{
-		"command": 3,
-        "params": "",
-		"hash":"6688f785308916906ccce2095814528a"
+		"command": "ping",
+		"params": " -c 4    127.0.0.1 "
 	}
 }
 ```
@@ -684,37 +719,80 @@ usl_ftp_save_cfg_file_name 名称随意给即可，服务器会统一文件名�
 }
 ```
 
-- command 的值为 3， 对比 get_commands 的返回结果得知执行ping命令
-- hash get_commands 返回的hash，需要重新带回去，服务器会校验，如果hash值不匹配返回错误，需要重新获取get_commands,因此后端的command.txt 文件被修改了。
+- command: 要执行的具体命令,这些命令必须存在于 get_command 的返回结果，否则不支持.
 - params 可以传递命令需要的相关参数  
-- Response hash not match
+
+
+## 3.11. SNMP Server 配置 
+
+### 3.11.1. 获取配置 
+
+- POST
+- URL : /v1/get_configure
+-  Body :
 ```json
 {
-    "message": "hash not match, refresh commands list",
-    "result": 2
+	"token":"da5fddbb-19b4-4397-abdd-ce986e260165"
+}
+
+```
+
+- Response
+```json
+{
+    "data": {
+        "configure": {
+            "ntpd_enable": false,
+            "ntp_server_1": "",
+            "ntp_server_2": "",
+            "web_port": 9192,
+            "snmp_port": 162
+        }
+    },
+    "message": "OK",
+    "result": 0
 }
 ```
 
 
-# 16. 内嵌web
+### 3.11.2. 设置配置 
 
-## 16.1. dist.zip 
+- POST
+- URl : /v1/
+- Body 
 
-- dist.zip 文件放到 src/snmp_server目录
-- unzip dist.zip 解压到 src/snmp_server目录， 出现 src/snmp_server/dist 目录 
+configure 的字段为当前支持的配置项目，每个都提交  
 
-## 16.2. build 内嵌资源 asset.go 文件
-
-```bash
-cd src/snmp_server 
-go-bindata -o asset/asset.go -pkg=asset dist/...
+```json
+{
+	"token":"e43a9e5c-a42a-4dc8-8524-11d483167243",
+	"data": {
+        "configure": {
+            "ntpd_enable": false,
+            "ntp_server_1": "",
+            "ntp_server_2": "",
+            "web_port": 9192,
+            "snmp_port": 162
+        }
+    }
+}
 ```
 
-## 16.3. go-bindata 安装 (执行一次即可)
+- web_port,snmp_port 修改后，重启生效
 
-```bash
-export GOPATH=`pwd` #在snmp 目录设置
-go get -u github.com/jteeuwen/go-bindata/...
+- Response 返回最新的配置信息
+```json
+{
+    "data": {
+        "configure": {
+            "ntpd_enable": false,
+            "ntp_server_1": "",
+            "ntp_server_2": "",
+            "web_port": 9192,
+            "snmp_port": 162
+        }
+    },
+    "message": "OK",
+    "result": 0
+}
 ```
-
-- 安装完成后，把 `pwd`/bin 目录加入 PATH目录或者把 `pwd`/bin/go-bindata 文件复制到 /usr/local/bin目录下面

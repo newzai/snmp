@@ -13,3 +13,4 @@ src/snmp_server/task.db
 src/snmp_server/._snmp_server
 src/snmp_server/dist/
 src/snmp_server/dist.zip
+src/cmd_test/
