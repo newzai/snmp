@@ -6,7 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"snmp_server/globalvars"
-	"snmp_server/mibs"
+	"snmp_server/mibs/report"
 	"snmp_server/model"
 	"snmp_server/xdb"
 	"snmp_server/xsnmp"
@@ -20,7 +20,7 @@ import (
 
 //Register for trap register
 func Register(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
-	msg := new(mibs.Register)
+	msg := new(report.Register)
 	msg.FromSnmpPackage(packet)
 	if !strings.HasPrefix(msg.Zone, "root.") {
 		msg.Zone = "root." + msg.Zone

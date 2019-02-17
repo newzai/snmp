@@ -2,7 +2,7 @@ package xtraphandler
 
 import (
 	"net"
-	"snmp_server/mibs"
+	"snmp_server/mibs/report"
 	"snmp_server/model"
 	"snmp_server/xdb"
 	"snmp_server/xsnmp"
@@ -16,7 +16,7 @@ import (
 //Keepalive keepalive
 func Keepalive(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
 	seelog.Info("recv OID_KEEPALIVE from ", remote)
-	msg := new(mibs.Keepalive)
+	msg := new(report.Keepalive)
 	msg.FromSnmpPackage(packet)
 	seelog.Infof("msg:%s", msg)
 

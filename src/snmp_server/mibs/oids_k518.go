@@ -105,6 +105,7 @@ var oid518 = []OIDAttr{
 	OIDAttr{Name: "k518_pnm_self_detect_timer", OID: "1800.51.14.24", Type: gosnmp.Integer, ReadOnly: false, ValidHander: k518PnmSelfDetectTimer},
 	OIDAttr{Name: "k518_pnm_self_pin_control_list", OID: "1800.51.14.25", Type: gosnmp.OctetString, ReadOnly: false, ValidHander: k518PnmSelfPinControlList},
 	OIDAttr{Name: "k518_pnm_self_pin_name_list", OID: "1800.51.14.26", Type: gosnmp.OctetString, ReadOnly: false, ValidHander: k518PnmSelfPinNameList},
+	OIDAttr{Name: "k518_union_switch", OID: "1800.51.14.27", Type: gosnmp.Integer, ReadOnly: false, ValidHander: k518UnionSwitch},
 	OIDAttr{Name: "k518_dtmf_relay_mode", OID: "1800.51.15.1", Type: gosnmp.Integer, ReadOnly: false, ValidHander: k518DtmfRelayMode},
 	OIDAttr{Name: "k518_codec_type_list", OID: "1800.51.15.2", Type: gosnmp.OctetString, ReadOnly: false, ValidHander: k518CodecTypeList},
 	OIDAttr{Name: "k518_hotline_enable", OID: "1800.51.15.3", Type: gosnmp.Integer, ReadOnly: false, ValidHander: k518HotlineEnable},

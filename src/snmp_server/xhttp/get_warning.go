@@ -62,6 +62,7 @@ type WarningTest struct {
 	Type   string `json:"warning_type"`
 	Clear  int    `json:"clear"`
 	Status int    `json:"status"`
+	Demo   string `json:"demo"`
 }
 
 func (r *WarningTest) String() string {
@@ -87,6 +88,11 @@ func (r *WarningTest) IsClear() bool {
 //GetNTID is clear message
 func (r *WarningTest) GetNTID() string {
 	return r.NTID
+}
+
+//GetDemo demo for warning
+func (r *WarningTest) GetDemo() string {
+	return r.Demo
 }
 
 func warningTest(c *gin.Context) {

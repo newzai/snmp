@@ -3,6 +3,7 @@ package xtraphandler
 import (
 	"net"
 	"snmp_server/mibs"
+	"snmp_server/mibs/warning"
 	"snmp_server/model"
 	"snmp_server/xdb"
 	"snmp_server/xtrap"
@@ -42,6 +43,7 @@ func doWarning(msg mibs.IWarning) {
 			Path:   t.Path,
 			WType:  msg.WarningType(),
 			WValue: msg.WarningStatus(),
+			WDemo:  msg.GetDemo(),
 		}
 		err = xwarning.InsertWarning(w, xdb.EngineWarning)
 		if err != nil {
@@ -54,7 +56,7 @@ func doWarning(msg mibs.IWarning) {
 
 func deviceMICWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
 
-	msg := new(mibs.DeviceMICWarning)
+	msg := new(warning.DeviceMICWarning)
 	msg.FromSnmpPackage(packet)
 	seelog.Info("recv Warning:", msg)
 	doWarning(msg)
@@ -62,50 +64,78 @@ func deviceMICWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
 }
 
 func deviceSpeakerWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
-	msg := new(mibs.DeviceSpeakerWarning)
+	msg := new(warning.DeviceSpeakerWarning)
 	msg.FromSnmpPackage(packet)
 	seelog.Info("recv Warning:", msg)
 	doWarning(msg)
 }
 func deviceLEDWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
 
-	msg := new(mibs.DeviceLEDWarning)
+	msg := new(warning.DeviceLEDWarning)
 	msg.FromSnmpPackage(packet)
 	seelog.Info("recv Warning:", msg)
 	doWarning(msg)
 }
 
 func deviceKeypWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
-	msg := new(mibs.DeviceKeypWarning)
+	msg := new(warning.DeviceKeypWarning)
 	msg.FromSnmpPackage(packet)
 	seelog.Info("recv Warning:", msg)
 	doWarning(msg)
 }
 
 func deviceQuickWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
-	msg := new(mibs.DeviceQuickWarning)
+	msg := new(warning.DeviceQuickWarning)
 	msg.FromSnmpPackage(packet)
 	seelog.Info("recv Warning:", msg)
 	doWarning(msg)
 }
 func deviceCameraWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
-	msg := new(mibs.DeviceCameraWarning)
+	msg := new(warning.DeviceCameraWarning)
 	msg.FromSnmpPackage(packet)
 	seelog.Info("recv Warning:", msg)
 	doWarning(msg)
 }
 func deviceLCDWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
-	msg := new(mibs.DeviceLCDWarning)
+	msg := new(warning.DeviceLCDWarning)
 	msg.FromSnmpPackage(packet)
 	seelog.Info("recv Warning:", msg)
 	doWarning(msg)
 }
 func deviceShellWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
-	msg := new(mibs.DeviceShellWarning)
+	msg := new(warning.DeviceShellWarning)
 	msg.FromSnmpPackage(packet)
 	seelog.Info("recv Warning:", msg)
 	doWarning(msg)
 }
+
+func powerWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.PowerWarning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+func calloutWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.CalloutWarning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
+func registerWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.RegisterWarning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
+func drycontactWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.DrycontactWarning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
 func init() {
 
 	xtrap.RegisterHandler(trapTypeDeviceMICWarning, deviceMICWarning)
@@ -116,4 +146,8 @@ func init() {
 	xtrap.RegisterHandler(trapTypeDeviceCameraWarning, deviceCameraWarning)
 	xtrap.RegisterHandler(trapTypeDeviceLCDWarning, deviceLCDWarning)
 	xtrap.RegisterHandler(trapTypeDeviceShellWarning, deviceShellWarning)
+	xtrap.RegisterHandler(traptypePowerWarning, powerWarning)
+	xtrap.RegisterHandler(trapCalloutWarning, calloutWarning)
+	xtrap.RegisterHandler(trapRegisterWarning, registerWarning)
+	xtrap.RegisterHandler(trapDrycontactWarning, drycontactWarning)
 }

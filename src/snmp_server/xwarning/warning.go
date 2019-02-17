@@ -18,6 +18,7 @@ type Warning struct {
 	Path    string    `xorm:"path" json:"path"`             //设备 Path
 	WType   string    `xorm:"wtype" json:"wtype"`           //告警类型
 	WValue  int       `xorm:"wvalue" json:"wvalue"`         //告警值
+	WDemo   string    `xorm:"wdemo" json:"wdemo"`           //告警描述信息
 	OTime   time.Time `xorm:"otime" json:"otime"`           //告警发生时间
 	Confirm bool      `xorm:"confirm" json:"confirm"`       //告警是否确认
 	CTime   time.Time `xorm:"ctime" json:"ctime"`           //告警确认时间
@@ -33,6 +34,7 @@ type HistoryWarning struct {
 	TName   string    `xorm:"tname" json:"tname"`           // 设备 Name
 	WType   string    `xorm:"wtype" json:"wtype"`           //告警类型
 	WValue  int       `xorm:"wvalue" json:"wvalue"`         //告警值
+	WDemo   string    `xorm:"wdemo" json:"wdemo"`           //告警描述信息
 	OTime   time.Time `xorm:"otime" json:"otime"`           //告警发生时间
 	Confirm bool      `xorm:"confirm" json:"confirm"`       //告警是否确认
 	CTime   time.Time `xorm:"ctime" json:"ctime"`           //告警确认时间

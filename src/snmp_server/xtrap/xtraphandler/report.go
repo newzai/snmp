@@ -2,7 +2,7 @@ package xtraphandler
 
 import (
 	"net"
-	"snmp_server/mibs"
+	"snmp_server/mibs/report"
 	"snmp_server/xdb"
 	"snmp_server/xtask"
 	"snmp_server/xtrap"
@@ -14,7 +14,7 @@ import (
 
 func upgradeReport(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
 
-	msg := new(mibs.UpgradeReport)
+	msg := new(report.UpgradeReport)
 	msg.FromSnmpPackage(packet)
 	seelog.Info("recv upgradeReport:", msg)
 	upgrade := xtask.Upgrade{NTID: msg.NTID}
@@ -39,19 +39,19 @@ func upgradeReport(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
 	seelog.Infof("upgrade task %s Result %s", upgrade.NTID, xtask.UpgradeResult(upgrade.Result))
 }
 func restoreCfgReport(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
-	msg := new(mibs.UpgradeRestoreCfgReport)
+	msg := new(report.UpgradeRestoreCfgReport)
 	msg.FromSnmpPackage(packet)
 	seelog.Info("recv restoreCfgReport:", msg)
 }
 
 func saveCfgReport(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
-	msg := new(mibs.UpgradeSaveCfgReport)
+	msg := new(report.UpgradeSaveCfgReport)
 	msg.FromSnmpPackage(packet)
 	seelog.Info("recv saveCfgReport:", msg)
 }
 
 func deviceRebootReport(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
-	msg := new(mibs.DeviceRebootReport)
+	msg := new(report.DeviceRebootReport)
 	msg.FromSnmpPackage(packet)
 	seelog.Info("recv DeviceRebootReport:", msg)
 }

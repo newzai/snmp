@@ -512,6 +512,12 @@ func k518PnmSelfPinNameList(value interface{}) error {
 	return nil
 }
 
+//k518UnionSwitch k518_union_switch int
+func k518UnionSwitch(value interface{}) error {
+	//0-禁止  1-启用
+	return nil
+}
+
 //k518DtmfRelayMode k518_dtmf_relay_mode int
 func k518DtmfRelayMode(value interface{}) error {
 	//0-2833 1-sipinfo
