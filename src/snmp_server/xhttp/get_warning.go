@@ -18,7 +18,7 @@ type getWarningRequest struct {
 
 func getWarning(c *gin.Context) {
 
-	var request getHardwareRequest
+	var request getWarningRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusOK, gin.H{"result": 1, "message": err.Error()})
 		return
@@ -54,6 +54,33 @@ func getWarning(c *gin.Context) {
 		},
 	}
 	c.JSON(http.StatusOK, result)
+}
+
+type cleanWarningData struct {
+	ID int64 `json:"id"` // the warning id
+}
+
+type clearWarningRequest struct {
+	Token string           `json:"token"`
+	Data  cleanWarningData `json:"data"`
+}
+
+func clearWarning(c *gin.Context) {
+
+	var request clearWarningRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(http.StatusOK, gin.H{"result": 1, "message": err.Error()})
+		return
+	}
+	if !authToken(request.Token, c) {
+		return
+	}
+
+	w, err := xwarning.GetWarningByID(request.Data.ID, xdb.EngineWarning)
+	if err == nil {
+		xwarning.ClearWarning(w.NTID, w.WType, xdb.EngineWarning)
+	}
+	c.JSON(http.StatusOK, gin.H{"result": 0, "message": "OK"})
 }
 
 //WarningTest WarningTest

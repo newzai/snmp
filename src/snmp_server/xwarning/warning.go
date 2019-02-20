@@ -64,7 +64,22 @@ func InsertWarning(w *Warning, engine *xorm.Engine) error {
 	w.OTime = time.Now()
 
 	_, err = engine.InsertOne(w)
+	Stats.Add(w.TID)
 	return err
+}
+
+//GetWarningByID get warning by id
+func GetWarningByID(wid int64, engine *xorm.Engine) (*Warning, error) {
+	w := new(Warning)
+	has, err := engine.Id(wid).Get(w)
+	if err != nil {
+		return nil, err
+	}
+	if !has {
+		return nil, fmt.Errorf("Warning(%d) not exist", wid)
+	}
+
+	return w, nil
 }
 
 //ConfirmWarning 告警确认
@@ -108,6 +123,7 @@ func ClearWarning(nitd string, wtype string, engine *xorm.Engine) {
 	}
 
 	engine.InsertOne(hw)
+	Stats.Del(w.TID)
 }
 
 //GetWarnings get warning  if id > wid
@@ -152,7 +168,7 @@ func GetWarningsByTID(tid int, engine *xorm.Engine) ([]*Warning, error) {
 		return nil, err
 	}
 
-	warnings := make([]*Warning, 0, 2)
+	warnings := make([]*Warning, 0, 10)
 	for rows.Next() {
 		ww := new(Warning)
 		rows.Scan(ww)
@@ -164,5 +180,7 @@ func GetWarningsByTID(tid int, engine *xorm.Engine) ([]*Warning, error) {
 //InitDatabase init warning db
 func InitDatabase(engine *xorm.Engine) {
 
+	Stats = newWarningStats(engine)
+	go Stats.exec()
 	engine.Sync2(new(Warning))
 }

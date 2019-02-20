@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"snmp_server/model"
 	"snmp_server/xdb"
+	"snmp_server/xwarning"
 
 	"github.com/cihub/seelog"
 
@@ -28,6 +29,7 @@ type itemInfo struct {
 	ItemType int    `json:"itemtype"`
 	Status   int    `json:"status"`
 	DevType  string `json:"dev_type"`
+	Warnings int    `json:"warnings"`
 }
 
 func getitem(c *gin.Context) {
@@ -65,6 +67,10 @@ func getitem(c *gin.Context) {
 			if terminal.IsOnline() {
 				status = 1
 			}
+			warnings := 0
+			if status == 1 {
+				warnings = xwarning.Stats.GetCounts(terminal.ID)
+			}
 			item := itemInfo{
 				ItemID:   terminal.ID,
 				Parent:   terminal.Parent,
@@ -73,6 +79,7 @@ func getitem(c *gin.Context) {
 				ItemType: 2,
 				Status:   status,
 				DevType:  terminal.Type,
+				Warnings: warnings,
 			}
 			items = append(items, item)
 		}
@@ -96,6 +103,10 @@ func getitem(c *gin.Context) {
 			if terminal.IsOnline() {
 				status = 1
 			}
+			warnings := 0
+			if status == 1 {
+				warnings = xwarning.Stats.GetCounts(terminal.ID)
+			}
 			item := itemInfo{
 				ItemID:   terminal.ID,
 				Parent:   terminal.Parent,
@@ -104,6 +115,7 @@ func getitem(c *gin.Context) {
 				ItemType: 2,
 				Status:   status,
 				DevType:  terminal.Type,
+				Warnings: warnings,
 			}
 			items = append(items, item)
 		}
