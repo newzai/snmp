@@ -42,7 +42,7 @@ func Keepalive(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
 		xsnmp.Default.Set(RegisterAgain, 0, remote)
 		return
 	}
-
+	setKeepalive(msg.NTID, remote.String())
 	t.LastKeepalive = time.Now()
 	t.IP = remote.IP.String()
 	t.Port = remote.Port

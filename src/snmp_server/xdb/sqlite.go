@@ -1,6 +1,8 @@
 package xdb
 
 import (
+	"time"
+
 	"github.com/go-xorm/xorm"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -29,5 +31,14 @@ func Init(showSQL bool) {
 	Engine.ShowSQL(showSQL)
 	EngineTask.ShowSQL(showSQL)
 	EngineWarning.ShowSQL(showSQL)
+
+	Engine.DatabaseTZ = time.Local
+	Engine.TZLocation = time.Local
+
+	EngineTask.DatabaseTZ = time.Local
+	EngineTask.TZLocation = time.Local
+
+	EngineWarning.DatabaseTZ = time.Local
+	EngineWarning.TZLocation = time.Local
 
 }

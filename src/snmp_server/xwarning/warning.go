@@ -100,6 +100,14 @@ func ConfirmWarning(wid uint64, info string, engine *xorm.Engine) error {
 	return err
 }
 
+//UpdateWarning 更新告警
+func UpdateWarning(w *Warning, engine *xorm.Engine) error {
+	w.OTime = time.Now()
+
+	_, err := engine.Cols("otime", "wdemo").Update(w)
+	return err
+}
+
 //ClearWarning clear warning
 func ClearWarning(nitd string, wtype string, engine *xorm.Engine) {
 	w, has := GetWarning(nitd, wtype, engine)

@@ -151,11 +151,28 @@ func snmpBatch(c *gin.Context) {
 			if _, ok := oids["usl_ftp_save_cfg_file_name"]; ok {
 				oids["usl_ftp_save_cfg_file_name"] = fmt.Sprintf("%s/%s.cfg", t.NTID, time.Now().Format("20060102_150405"))
 			}
-			_, err = xsnmp.Default.Set(oids, 0, t.Remote())
+			snmpResult, err := xsnmp.Default.Set(oids, 0, t.Remote())
 
 			if err == nil {
+				jdata, _ := json.Marshal(snmpResult)
+				logInfo := &model.LogInfo{
+					User:     getUsernameByToken(request.Token),
+					NTID:     t.NTID,
+					Event:    "snmp",
+					SubEvent: "set_ok",
+					Info:     string(jdata),
+				}
+				logInfo.Insert()
 				rspOkItems = append(rspOkItems, &tItemInfo{ItemID: t.ID, ItemName: t.Name})
 			} else {
+				logInfo := &model.LogInfo{
+					User:     getUsernameByToken(request.Token),
+					NTID:     t.NTID,
+					Event:    "snmp",
+					SubEvent: "set_err",
+					Info:     err.Error(),
+				}
+				logInfo.Insert()
 				rspErrorItems = append(rspErrorItems, &tItemInfo{ItemID: t.ID, ItemName: t.Name, Error: err.Error()})
 				if ftpUpgrade != nil {
 					seelog.Warnf("ftp upgrade task Delete  %s for snmp set error", ftpUpgrade.NTID)

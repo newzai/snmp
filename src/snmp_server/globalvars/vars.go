@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"snmp_server/model"
 	"time"
 
 	"github.com/cihub/seelog"
@@ -30,6 +31,12 @@ var FTPGID = 0
 
 //UpgradeDir 防止升级文件的目录
 var UpgradeDir = "/home/klsnmp/upgrade"
+
+//ShowSQL show sql for xorm
+var ShowSQL = false
+
+//StartTime 系统启动时间
+var StartTime = time.Now()
 
 var (
 	//AppVersion app 版本号
@@ -71,12 +78,28 @@ func (c *Configure) Exec() {
 					cmd := exec.Command("date", "-s", time.Format("01/02/2006 15:04:05"))
 					cmd.Run()
 				} else {
+					logInfo := model.LogInfo{
+						User:     "ntp",
+						NTID:     "NA",
+						Event:    "ntp",
+						SubEvent: "sync_err",
+						Info:     "ntpserver1:" + err.Error(),
+					}
+					logInfo.Insert()
 					time, err = ntp.Time(c.NTPServer2)
 					if err == nil {
 						seelog.Infof("get time (%s) from NTPServer2(%s)", time.Format("01/02/2006 15:04:05"), c.NTPServer2)
 						cmd := exec.Command("date", "-s", time.Format("01/02/2006 15:04:05"))
 						cmd.Run()
 					} else {
+						logInfo := model.LogInfo{
+							User:     "ntp",
+							NTID:     "NA",
+							Event:    "ntp",
+							SubEvent: "sync_err",
+							Info:     "ntpserver2:" + err.Error(),
+						}
+						logInfo.Insert()
 						seelog.Errorf("get time error:%v", err)
 					}
 				}
@@ -103,6 +126,11 @@ func (c *Configure) Save() error {
 	err := ioutil.WriteFile("configure.json", jdata, os.ModePerm)
 
 	return err
+}
+
+func (c *Configure) String() string {
+	jdata, _ := json.Marshal(c)
+	return string(jdata)
 }
 
 //Default default configure

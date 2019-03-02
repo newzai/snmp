@@ -1,6 +1,7 @@
 package xhttp
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"snmp_server/model"
@@ -85,6 +86,14 @@ func snmp(c *gin.Context) {
 
 		snmpResult, err := xsnmp.Default.Set(request.Data.OIDs, request.Data.Index, t.Remote())
 		if err != nil {
+			logInfo := &model.LogInfo{
+				User:     getUsernameByToken(request.Token),
+				NTID:     t.NTID,
+				Event:    "snmp",
+				SubEvent: "set_err",
+				Info:     err.Error(),
+			}
+			logInfo.Insert()
 			c.JSON(http.StatusOK, gin.H{"result": 1, "message": err.Error()})
 
 			if ftpUpgrade != nil {
@@ -100,6 +109,15 @@ func snmp(c *gin.Context) {
 					"oids": snmpResult,
 				},
 			}
+			jdata, _ := json.Marshal(snmpResult)
+			logInfo := &model.LogInfo{
+				User:     getUsernameByToken(request.Token),
+				NTID:     t.NTID,
+				Event:    "snmp",
+				SubEvent: "set_ok",
+				Info:     string(jdata),
+			}
+			logInfo.Insert()
 			c.JSON(http.StatusOK, result)
 		}
 	default:

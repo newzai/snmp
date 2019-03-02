@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/signal"
 	"os/user"
 	"reflect"
 	"snmp_server/globalvars"
@@ -15,6 +16,7 @@ import (
 	"snmp_server/xtrap"
 	"snmp_server/xwarning"
 	"strconv"
+	"syscall"
 	"xconf"
 
 	"github.com/cihub/seelog"
@@ -32,6 +34,7 @@ var ftpGroup = flag.String("ftp_group", "uftp", "-ftp_user=uftp")
 var help = flag.Bool("help", false, "-help=true")
 var version = flag.Bool("version", false, "-version")
 var debug = flag.Bool("debug", false, "-debug=true|false")
+var disableFtp = flag.Bool("disable_ftp", false, "-disable_ftp")
 
 func main() {
 	flag.Parse()
@@ -56,20 +59,30 @@ func main() {
 	globalvars.FTPUser = *ftpUser
 	globalvars.FTPGroup = *ftpGroup
 	globalvars.UpgradeDir = *upgradeDir
-
+	globalvars.ShowSQL = *showSQL
+	model.ShowSQL = *showSQL
 	// start ftp dir, user, group check
-	ftpCheck()
+	if !*disableFtp {
+		ftpCheck()
+	}
 	//end ftp dir, ftp user , ftp group check
 
 	xconf.InitSeelog("./conf/", "./log/", "snmp", false, true, xconf.Info)
 	seelog.Info("snmp server start..")
+	model.SystemStartLog()
 	xdb.Init(*showSQL)
 	model.InitDatabase(xdb.Engine)
 	xtask.InitDatabase(xdb.EngineTask)
 	xwarning.InitDatabase(xdb.EngineWarning)
 	go xhttp.Run(globalvars.Default.WebPort)
 
-	xsnmp.Default.Start("0.0.0.0", uint16(globalvars.Default.SnmpPort), xtrap.OnTrapHandler)
+	go xsnmp.Default.Start("0.0.0.0", uint16(globalvars.Default.SnmpPort), xtrap.OnTrapHandler)
+
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
+
+	sig := <-sigs
+	model.SystemStopLog(sig.String())
 }
 
 func ftpCheck() {

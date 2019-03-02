@@ -91,4 +91,7 @@ func login(c *gin.Context) {
 		},
 	}
 	c.JSON(http.StatusOK, result)
+
+	logInfo := fmt.Sprintf("remote:%s, token:%s", c.Request.RemoteAddr, token)
+	model.UserLoginLog(user.Username, logInfo)
 }

@@ -20,3 +20,11 @@ func authToken(token string, c *gin.Context) bool {
 	}
 	return true
 }
+
+func getUsernameByToken(token string) string {
+	user, ok := sessions.GetUserSession(token)
+	if ok {
+		return user.Username
+	}
+	return "NA"
+}

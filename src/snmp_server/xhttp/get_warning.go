@@ -26,7 +26,7 @@ func getWarning(c *gin.Context) {
 	if !authToken(request.Token, c) {
 		return
 	}
-
+	sessions.SetUserSessionKeepalive(request.Token)
 	user, _ := sessions.GetUserSession(request.Token)
 	zone, err := model.GetZoneByID(user.Parent, xdb.Engine)
 	if err != nil {
@@ -79,8 +79,17 @@ func clearWarning(c *gin.Context) {
 	w, err := xwarning.GetWarningByID(request.Data.ID, xdb.EngineWarning)
 	if err == nil {
 		xwarning.ClearWarning(w.NTID, w.WType, xdb.EngineWarning)
+		logInfo := &model.LogInfo{
+			User:     getUsernameByToken(request.Token),
+			NTID:     w.NTID,
+			Event:    "warning_clear",
+			SubEvent: w.WType,
+			Info:     "manual clear",
+		}
+		logInfo.Insert()
 	}
 	c.JSON(http.StatusOK, gin.H{"result": 0, "message": "OK"})
+
 }
 
 //WarningTest WarningTest

@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"snmp_server/globalvars"
+	"snmp_server/model"
 	"strings"
 
 	"github.com/cihub/seelog"
@@ -37,6 +38,14 @@ func uploadHardware(c *gin.Context) {
 			c.String(http.StatusOK, fmt.Sprintf("upload file err: %s", err.Error()))
 			return
 		}
+		logInfo := &model.LogInfo{
+			User:     "NA",
+			NTID:     "NA",
+			Event:    "update",
+			SubEvent: "system",
+			Info:     filename,
+		}
+		logInfo.Insert()
 		c.String(http.StatusOK, fmt.Sprintf("File %s uploaded successfully with fields .", file.Filename))
 		return
 	}
@@ -82,7 +91,14 @@ func uploadHardware(c *gin.Context) {
 		c.String(http.StatusOK, fmt.Sprintf("chown file err: %s", err.Error()))
 		return
 	}
-
+	logInfo := &model.LogInfo{
+		User:     "NA",
+		NTID:     "NA",
+		Event:    "upload",
+		SubEvent: "terminal",
+		Info:     filename,
+	}
+	logInfo.Insert()
 	c.String(http.StatusOK, fmt.Sprintf("File %s uploaded successfully with fields .", file.Filename))
 }
 

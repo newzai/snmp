@@ -21,6 +21,14 @@ func DoWarningTest(msg mibs.IWarning) {
 func doWarning(msg mibs.IWarning) {
 	if msg.IsClear() {
 		xwarning.ClearWarning(msg.GetNTID(), msg.WarningType(), xdb.EngineWarning)
+		logInfo := &model.LogInfo{
+			User:     "system",
+			NTID:     msg.GetNTID(),
+			Event:    "warning_clear",
+			SubEvent: msg.WarningType(),
+			Info:     "auto clear:" + msg.GetDemo(),
+		}
+		logInfo.Insert()
 		return
 	}
 
@@ -51,6 +59,25 @@ func doWarning(msg mibs.IWarning) {
 		} else {
 			seelog.Infof("insert %s %s warning ok", w.NTID, w.WType)
 		}
+		logInfo := &model.LogInfo{
+			User:     "system",
+			NTID:     msg.GetNTID(),
+			Event:    "warning_occur",
+			SubEvent: msg.WarningType(),
+			Info:     msg.GetDemo(),
+		}
+		logInfo.Insert()
+	} else {
+		w.WDemo = msg.GetDemo()
+		xwarning.UpdateWarning(w, xdb.EngineWarning)
+		logInfo := &model.LogInfo{
+			User:     "system",
+			NTID:     msg.GetNTID(),
+			Event:    "warning_occur",
+			SubEvent: msg.WarningType(),
+			Info:     msg.GetDemo(),
+		}
+		logInfo.Insert()
 	}
 }
 

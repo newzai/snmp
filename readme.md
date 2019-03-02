@@ -35,6 +35,8 @@
 * 15. [3.12. 告警](#-1)
 	* 15.1. [3.12.1. 获取告警](#-1)
 	* 15.2. [3.12.2. 清除告警](#-1)
+* 16. [日志事件](#-1)
+	* 16.1. [日志查询接口](#-1)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -819,5 +821,135 @@ configure 的字段为当前支持的配置项目，每个都提交
 	"data": {
         "id":int
     }
+}
+```
+
+##  16. <a name='-1'></a>日志事件  
+
+用户|设备|事件|子事件|说明|状态|
+:--|:--|:---|:---|:--|:--|
+systen|server|start|start|软件启动|完成
+system|server|stop|stop|软件退出|完成
+user|NA|login|login|用户登录事件，记录登录IP|完成
+user|NA|logout|logout|用户退出,记录登录IP，最后一次请求时间|完成
+user|NA|upload|terminal|终端软件上传，记录上传文件名称|完成，但未记录user
+user|NA|update|system|系统软件升级|完成，但未记录user
+user|NA|config|set_config|系统配置,记录配置信息|完成
+ntp|NA|ntp|sync_err|ntp同步失败,记录失败的原因|完成
+user|ntid|snmp|set_ok|snmp配置成功，记录下发配置的内容|完成
+user|ntid|snmp|set_err|snmp配置失败，记录失败的原因.|完成
+system|ntid|warning_occur|warning_type|告警发生 记录 warning demo|完成
+system|ntid|warning_clear|warning_type|告警自动清除，记录 warning demo|完成
+user|ntid|warning_clear|warning_type|告警手动清除|完成|完成
+system|ntid|status|online|设备从 offline--> online 事件|完成
+system|ntid|status|offline|设备从 online--> offline 事件|完成
+system|ntid|status|create|设备初始化，创建| 完成
+
+- warningType : callout,camera,keyp,lcd,led,mic,quick,shell,speaker,drycontact,power,register,
+
+###  16.1. <a name='-1'></a>日志查询接口 
+
+- POST
+- URL  :/v1/get_logs
+- BODY
+
+```json
+{
+	"token":"470db58e-f42b-432f-9118-44062938b202",
+	"data":
+	{
+		"wheres":{
+			"time_start":"2019-03-01 00:00:00",
+			 "time_end": "2019-03-03 00:00:00",
+			 "username": "admin",
+			 "ntid": "NA",
+			 "event":"logout",
+			 "sub_event": "timeout"
+		},
+		"index":1,
+		"size": 20
+	}
+}
+```
+
+- wheres 条件中的 time_start, time_end 至少要包含一个， 如果同时包含，必须相同年月，不允许跨月查询
+- username,ntid,event,sub_event 属于可选字段，传递 "" 字符忽略相关字段
+- index 和 size 用于分页查询
+    - index 表示第几页， 起始页面从1开始，不存在第0页
+    - size 每页的大小
+
+- Response 
+```json
+{
+    "data": {
+        "logs": [
+            {
+                "id": 11,
+                "username": "admin",
+                "ntid": "NA",
+                "event": "logout",
+                "sub_event": "timeout",
+                "timestamp": "2019-03-02T01:42:43+08:00",
+                "info": "last:0001-01-01 00:00:00, token:853c992a-c32c-47ef-ad45-70740b486a37"
+            },
+            {
+                "id": 15,
+                "username": "admin",
+                "ntid": "NA",
+                "event": "logout",
+                "sub_event": "timeout",
+                "timestamp": "2019-03-02T01:46:15+08:00",
+                "info": "last:0001-01-01 00:00:00, token:470db58e-f42b-432f-9118-44062938b202"
+            },
+            {
+                "id": 19,
+                "username": "admin",
+                "ntid": "NA",
+                "event": "logout",
+                "sub_event": "timeout",
+                "timestamp": "2019-03-02T01:56:02+08:00",
+                "info": "last:2019-03-02 01:55:02, token:21fdc34d-c272-489a-b39e-8d5d5cc63b94"
+            },
+            {
+                "id": 23,
+                "username": "admin",
+                "ntid": "NA",
+                "event": "logout",
+                "sub_event": "timeout",
+                "timestamp": "2019-03-02T11:41:16+08:00",
+                "info": "last:2019-03-02 11:40:16, token:a377d106-0eee-4497-94cf-7d4bb33082cc"
+            }
+        ]
+    },
+    "message": "OK",
+    "result": 0
+}
+```
+
+## 系统自检
+
+- POST
+- URL : /v1/system_check
+- Body 
+```json
+{
+	"token":"58bc9272-4f5d-4982-b5dc-b215813b83af"
+}
+```
+
+- Response 
+```json
+{
+    "data": {
+        "cpu_percent": "0.352571 %",
+        "disk_free": "194 G",
+        "disk_status": true,
+        "memory_percent": "0.430870 %",
+        "net_status": true,
+        "run_time": "0.018717 hours",
+        "start_time": "2019-03-02 16:33:00"
+    },
+    "message": "OK",
+    "result": 0
 }
 ```

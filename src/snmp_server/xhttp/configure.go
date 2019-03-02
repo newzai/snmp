@@ -3,6 +3,7 @@ package xhttp
 import (
 	"net/http"
 	"snmp_server/globalvars"
+	"snmp_server/model"
 
 	"github.com/gin-gonic/gin"
 )
@@ -70,5 +71,14 @@ func setConfigure(c *gin.Context) {
 			"configure": globalvars.Default,
 		},
 	}
+
+	logInfo := &model.LogInfo{
+		User:     getUsernameByToken(request.Token),
+		NTID:     "NA",
+		Event:    "config",
+		SubEvent: "set_config",
+		Info:     globalvars.Default.String(),
+	}
+	logInfo.Insert()
 	c.JSON(http.StatusOK, result)
 }
