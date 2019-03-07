@@ -1,6 +1,7 @@
 package xhttp
 
 import (
+	"bytes"
 	"net/http"
 	"snmp_server/model"
 	"strings"
@@ -10,12 +11,12 @@ import (
 
 //LogWheres 查询条件
 type logWheres struct {
-	TimeStart string `json:"time_start"`
-	TimeEnd   string `json:"time_end,omitempty"`
-	User      string `json:"username,omitempty"`
-	NTID      string `json:"ntid,omitempty"`
-	Event     string `json:"event,omitempty"`
-	SubEvent  string `json:"sub_event,omitempty"`
+	TimeStart string   `json:"time_start"`
+	TimeEnd   string   `json:"time_end,omitempty"`
+	Users     []string `json:"username,omitempty"`
+	NTIDs     []string `json:"ntid,omitempty"`
+	Event     string   `json:"event,omitempty"`
+	SubEvent  string   `json:"sub_event,omitempty"`
 }
 
 //LogRequestData 请求data
@@ -71,13 +72,36 @@ func getlogs(c *gin.Context) {
 		wheres = append(wheres, "ts <= ?")
 		args = append(args, request.Data.Wheres.TimeEnd)
 	}
-	if len(request.Data.Wheres.User) > 0 {
-		wheres = append(wheres, "user = ?")
-		args = append(args, request.Data.Wheres.User)
+	if len(request.Data.Wheres.Users) > 0 {
+		userWheres := bytes.NewBuffer(nil)
+		userWheres.WriteString("(")
+		for index, user := range request.Data.Wheres.Users {
+			if index > 0 {
+				userWheres.WriteString(" or ")
+			}
+			userWheres.WriteString(" user = ? ")
+			args = append(args, user)
+		}
+
+		userWheres.WriteString(")")
+		wheres = append(wheres, userWheres.String())
+
 	}
-	if len(request.Data.Wheres.NTID) > 0 {
-		wheres = append(wheres, "ntid = ?")
-		args = append(args, request.Data.Wheres.NTID)
+	if len(request.Data.Wheres.NTIDs) > 0 {
+
+		ntidWheres := bytes.NewBuffer(nil)
+		ntidWheres.WriteString("(")
+		for index, ntid := range request.Data.Wheres.NTIDs {
+			if index > 0 {
+				ntidWheres.WriteString(" or ")
+			}
+			ntidWheres.WriteString(" ntid = ? ")
+			args = append(args, ntid)
+		}
+		ntidWheres.WriteString(")")
+
+		wheres = append(wheres, ntidWheres.String())
+
 	}
 	if len(request.Data.Wheres.Event) > 0 {
 		wheres = append(wheres, "event = ?")
@@ -93,6 +117,11 @@ func getlogs(c *gin.Context) {
 	pageSize := request.Data.PageSize
 	offset := (request.Data.PageSize) * (request.Data.PageIndex - 1)
 	var logInfo model.LogInfo
+	counts, err := engine.Where(where, args...).Count(logInfo)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"result": 1, "message": err.Error()})
+		return
+	}
 	rows, err := engine.Where(where, args...).Limit(pageSize, offset).Rows(logInfo)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"result": 1, "message": err.Error()})
@@ -109,7 +138,8 @@ func getlogs(c *gin.Context) {
 		"result":  0,
 		"message": "OK",
 		"data": gin.H{
-			"logs": logs,
+			"logs":   logs,
+			"counts": counts,
 		},
 	}
 	c.JSON(http.StatusOK, result)

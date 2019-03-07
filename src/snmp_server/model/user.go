@@ -15,6 +15,23 @@ type User struct {
 	Parent   int    `xorm:"'parent'"`
 }
 
+//GetAllUsers   返回所有用户
+func GetAllUsers(engine *xorm.Engine) ([]*User, error) {
+	var user User
+	rows, err := engine.Rows(user)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var users []*User
+	for rows.Next() {
+		tmp := new(User)
+		rows.Scan(tmp)
+		users = append(users, tmp)
+	}
+	return users, nil
+}
+
 //GetUsersByParent get users by parent
 func GetUsersByParent(parent int, engine *xorm.Engine) ([]*User, error) {
 	var user User

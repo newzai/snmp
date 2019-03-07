@@ -861,8 +861,8 @@ system|ntid|status|create|设备初始化，创建| 完成
 		"wheres":{
 			"time_start":"2019-03-01 00:00:00",
 			 "time_end": "2019-03-03 00:00:00",
-			 "username": "admin",
-			 "ntid": "NA",
+			 "username": ["admin"],
+			 "ntid": ["NA"],
 			 "event":"logout",
 			 "sub_event": "timeout"
 		},
@@ -882,6 +882,7 @@ system|ntid|status|create|设备初始化，创建| 完成
 ```json
 {
     "data": {
+        "counts":35,
         "logs": [
             {
                 "id": 11,
@@ -926,6 +927,63 @@ system|ntid|status|create|设备初始化，创建| 完成
 }
 ```
 
+- counts 表示根据查询条件，得到的总数，不是当前返回的个数
+
+### 辅助查询转换接口
+#### 获取所有用户列表
+
+- POST
+- URL : /v1/get_all_users
+- Body 
+```json
+{
+	"token":"2478db70-485f-4a57-a2ed-b7e9395f4fdb"
+}
+```
+
+- Response 
+```json
+{
+    "data": {
+        "usernames": [
+            "system",
+            "ntp",
+            "admin",
+            "joey1",
+            "joey6",
+            "jame"
+        ]
+    },
+    "message": "OK",
+    "result": 0
+}
+```
+#### 获取所有设备列表
+- POST
+- URL : /v1/get_all_terminals
+- Body 
+```json
+{
+	"token":"2478db70-485f-4a57-a2ed-b7e9395f4fdb"
+}
+```
+- Response
+```json
+{
+    "data": {
+        "root.guangzhou.liwang.debug-518-100": "00a859000b01",
+        "root.shenzheng.bao.debug-200": "0a85901851",
+        "root.shenzheng.bao.debug-300": "00a859001bc4",
+        "root.shenzheng.bao.debug-400": "00a859000a07",
+        "root.shenzheng.bao.debug-518-200": "00a859001851",
+        "root.shenzheng.bao.debug-519-100": "00a859001ad3",
+        "root.shenzheng.bao.debug-519-300": "00a859002d26",
+        "root.shenzheng.longhua.test518-0": "5489079b8a0d"
+    },
+    "message": "OK",
+    "result": 0
+}
+```
 ## 系统自检
 
 - POST

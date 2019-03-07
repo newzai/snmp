@@ -48,6 +48,24 @@ func (r *Terminal) Remote() *net.UDPAddr {
 	return addr
 }
 
+//GetAllTerminals 返回所有设备
+func GetAllTerminals(engine *xorm.Engine) ([]*Terminal, error) {
+	var t Terminal
+	rows, err := engine.Rows(t)
+	if err != nil {
+		return nil, err
+	}
+
+	var ts []*Terminal
+	defer rows.Close()
+	for rows.Next() {
+		tmp := new(Terminal)
+		rows.Scan(tmp)
+		ts = append(ts, tmp)
+	}
+	return ts, nil
+}
+
 //GetTerminalByParent get by parent..
 func GetTerminalByParent(parent int, engin *xorm.Engine) ([]*Terminal, error) {
 	var t Terminal

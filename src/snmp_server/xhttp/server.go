@@ -44,6 +44,8 @@ func Run(httpPort int) {
 		v1.POST("/set_configure", setConfigure)
 		v1.POST("/get_logs", getlogs)
 		v1.POST("/system_check", systemCheck)
+		v1.POST("/get_all_users", getAllUsers)
+		v1.POST("/get_all_terminals", getAllTerminals)
 	}
 	pprof.Register(r)
 

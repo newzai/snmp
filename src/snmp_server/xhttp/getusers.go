@@ -63,3 +63,39 @@ func getUsers(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"result": 1, "message": "missing zoneid "})
 	}
 }
+
+type getAllUsersRequest struct {
+	Token string `json:"token"`
+}
+
+func getAllUsers(c *gin.Context) {
+	var request getAllUsersRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(http.StatusOK, gin.H{"result": 1, "message": err.Error()})
+		return
+	}
+	if !authToken(request.Token, c) {
+		return
+	}
+
+	users, err := model.GetAllUsers(xdb.Engine)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"result": 1, "message": err.Error()})
+		return
+	}
+	usernames := make([]string, 0, len(users)+2)
+	usernames = append(usernames, "system")
+	usernames = append(usernames, "ntp")
+	for _, user := range users {
+		usernames = append(usernames, user.Username)
+	}
+
+	result := gin.H{
+		"result":  0,
+		"message": "OK",
+		"data": gin.H{
+			"usernames": usernames,
+		},
+	}
+	c.JSON(http.StatusOK, result)
+}

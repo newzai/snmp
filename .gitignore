@@ -16,3 +16,5 @@ src/snmp_server/dist.zip
 src/cmd_test/
 docker/
 src/snmp_server/xlsmibs/txtmibs/txtmibs
+*.db
+src/snmp_server/configure.json

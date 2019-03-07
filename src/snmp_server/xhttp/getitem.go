@@ -134,3 +134,36 @@ func getitem(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"result": 1, "message": "not support itemtype"})
 	}
 }
+
+type getAllTerminalsRequest struct {
+	Token string `json:"token"`
+}
+
+func getAllTerminals(c *gin.Context) {
+	var request getAllTerminalsRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(http.StatusOK, gin.H{"result": 1, "message": err.Error()})
+		return
+	}
+	if !authToken(request.Token, c) {
+		return
+	}
+
+	terminals, err := model.GetAllTerminals(xdb.Engine)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"result": 1, "message": err.Error()})
+		return
+	}
+	tsinfos := make(map[string]string)
+	for _, t := range terminals {
+		tsinfos[t.Path+"."+t.Name] = t.NTID
+	}
+
+	result := gin.H{
+		"result":  0,
+		"message": "OK",
+		"data":    tsinfos,
+	}
+	c.JSON(http.StatusOK, result)
+
+}
