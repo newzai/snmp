@@ -80,7 +80,7 @@ func setKeepalive(ntid string, remote string) {
 		t := value.(*terminal)
 		t.activeCh <- remote
 	} else {
-		t := terminal{
+		t := &terminal{
 			NTID:     ntid,
 			activeCh: make(chan string, 1),
 			ttl:      20,
