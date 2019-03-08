@@ -59,7 +59,7 @@ func (r *terminal) keepalive() {
 				r.start = time.Now()
 			}
 		case <-ticker.C:
-			allterminals.Delete(r.ttl)
+			allterminals.Delete(r.NTID)
 			offlineLog := model.LogInfo{
 				User:     "system",
 				NTID:     r.NTID,
