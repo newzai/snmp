@@ -37,6 +37,15 @@ func (r *LogInfo) Insert() error {
 	return err
 }
 
+//CloseDB 关闭数据库
+func (r *LogInfo) CloseDB() {
+	engine, err := getEngine(r.Time)
+	if err != nil {
+		engine.Close()
+		engines.Delete(r.Time.Format("2006-01"))
+	}
+}
+
 //SystemStartLog 系统启动日志
 func SystemStartLog() {
 	log := &LogInfo{

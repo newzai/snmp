@@ -5,6 +5,8 @@ import (
 	"errors"
 	"net/http"
 	"os/exec"
+	"snmp_server/model"
+	"snmp_server/sessions"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -101,6 +103,18 @@ func runCommand(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"result": 1, "message": err.Error()})
 		return
+	}
+	user, _ := sessions.GetUserSession(request.Token)
+	logInfo := &model.LogInfo{
+		User:     user.Username,
+		NTID:     "NA",
+		Event:    "runcommand",
+		SubEvent: request.Data.Command,
+		Info:     strings.Join(commandParams, " "),
+	}
+	logInfo.Insert()
+	if strings.EqualFold(request.Data.Command, "reboot") {
+		logInfo.CloseDB()
 	}
 	command := exec.Command(request.Data.Command, commandParams...)
 

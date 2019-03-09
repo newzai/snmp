@@ -846,6 +846,7 @@ user|ntid|warning_clear|warning_type|告警手动清除|完成|完成
 system|ntid|status|online|设备从 offline--> online 事件|完成
 system|ntid|status|offline|设备从 online--> offline 事件|完成
 system|ntid|status|create|设备初始化，创建| 完成
+user|NA|runcommand|command|params|完成
 
 - warningType : callout,camera,keyp,lcd,led,mic,quick,shell,speaker,drycontact,power,register,
 
