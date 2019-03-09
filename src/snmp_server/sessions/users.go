@@ -22,15 +22,22 @@ type UserSession struct {
 
 func (r *UserSession) keepalive() {
 
+	defer userSessions.Delete(r.token)
 	timer := time.NewTimer(time.Duration(r.ttl) * time.Second)
 	r.lastTime = time.Now()
 	for {
 		select {
-		case <-r.activeCh:
-			r.lastTime = time.Now()
-			timer.Reset(time.Duration(r.ttl) * time.Second)
+		case active := <-r.activeCh:
+			if active {
+				r.lastTime = time.Now()
+				timer.Reset(time.Duration(r.ttl) * time.Second)
+			} else {
+				model.UserLogoutLog(r.user.Username, fmt.Sprintf("last:%s, token:%s", r.lastTime.Format("2006-01-02 15:04:05"), r.token), false)
+				return
+			}
+
 		case <-timer.C:
-			model.UserLogoutLog(r.user.Username, fmt.Sprintf("last:%s, token:%s", r.lastTime.Format("2006-01-02 15:04:05"), r.token))
+			model.UserLogoutLog(r.user.Username, fmt.Sprintf("last:%s, token:%s", r.lastTime.Format("2006-01-02 15:04:05"), r.token), true)
 			return
 		}
 	}
@@ -43,6 +50,16 @@ func SetUserSessionKeepalive(token string) {
 	if ok {
 		us := value.(*UserSession)
 		us.activeCh <- true
+
+	}
+}
+
+//Logout 用户主动注销
+func Logout(token string) {
+	value, ok := userSessions.Load(token)
+	if ok {
+		us := value.(*UserSession)
+		us.activeCh <- false
 
 	}
 }

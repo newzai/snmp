@@ -39,7 +39,7 @@ func (r *LogInfo) Insert() error {
 
 //SystemStartLog 系统启动日志
 func SystemStartLog() {
-	log := LogInfo{
+	log := &LogInfo{
 		User:     "system",
 		NTID:     "NA",
 		Event:    "start",
@@ -51,7 +51,7 @@ func SystemStartLog() {
 
 //SystemStopLog 系统停止日志
 func SystemStopLog(info string) {
-	log := LogInfo{
+	log := &LogInfo{
 		User:     "system",
 		NTID:     "NA",
 		Event:    "stop",
@@ -63,7 +63,7 @@ func SystemStopLog(info string) {
 
 //UserLoginLog 用户登录记录
 func UserLoginLog(user string, info string) {
-	log := LogInfo{
+	log := &LogInfo{
 		User:     user,
 		NTID:     "NA",
 		Event:    "login",
@@ -74,12 +74,16 @@ func UserLoginLog(user string, info string) {
 }
 
 //UserLogoutLog 用户登录记录
-func UserLogoutLog(user string, info string) {
-	log := LogInfo{
+func UserLogoutLog(user string, info string, timeout bool) {
+	subEvent := "manual"
+	if timeout {
+		subEvent = "timeout"
+	}
+	log := &LogInfo{
 		User:     user,
 		NTID:     "NA",
 		Event:    "logout",
-		SubEvent: "timeout",
+		SubEvent: subEvent,
 		Info:     info,
 	}
 	log.Insert()

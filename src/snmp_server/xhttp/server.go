@@ -22,6 +22,7 @@ func Run(httpPort int) {
 	v1 := r.Group("/v1")
 	{
 		v1.POST("/login", login)
+		v1.POST("/logout", logout)
 		v1.POST("/getitem", getitem)
 		v1.POST("/snmp", snmp)
 		v1.POST("/snmp_batch", snmpBatch)

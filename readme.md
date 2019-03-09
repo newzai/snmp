@@ -831,11 +831,13 @@ configure 的字段为当前支持的配置项目，每个都提交
 systen|server|start|start|软件启动|完成
 system|server|stop|stop|软件退出|完成
 user|NA|login|login|用户登录事件，记录登录IP|完成
-user|NA|logout|logout|用户退出,记录登录IP，最后一次请求时间|完成
+user|NA|logout|logout|用户手动退出,记录登录IP，最后一次请求时间|完成
+user|NA|logout|timeout|用户超时退出|完成
 user|NA|upload|terminal|终端软件上传，记录上传文件名称|完成，但未记录user
 user|NA|update|system|系统软件升级|完成，但未记录user
 user|NA|config|set_config|系统配置,记录配置信息|完成
 ntp|NA|ntp|sync_err|ntp同步失败,记录失败的原因|完成
+ntp|NA|ntp|sync_ok|ntp同步从失败切换到成功|完成
 user|ntid|snmp|set_ok|snmp配置成功，记录下发配置的内容|完成
 user|ntid|snmp|set_err|snmp配置失败，记录失败的原因.|完成
 system|ntid|warning_occur|warning_type|告警发生 记录 warning demo|完成

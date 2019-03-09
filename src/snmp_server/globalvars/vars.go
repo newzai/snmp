@@ -67,6 +67,7 @@ type Configure struct {
 func (c *Configure) Exec() {
 
 	seelog.Infof("Start Configure, NTPDEnable %t", c.NTPDEnable)
+	ntpErrorStatus := 0
 	for {
 		select {
 		case <-time.After(60 * time.Second):
@@ -74,32 +75,49 @@ func (c *Configure) Exec() {
 			if c.NTPDEnable {
 				time, err := ntp.Time(c.NTPServer1)
 				if err == nil {
+					if ntpErrorStatus > 0 {
+						logInfo := &model.LogInfo{
+							User:     "ntp",
+							NTID:     "NA",
+							Event:    "ntp",
+							SubEvent: "sync_ok",
+							Info:     "ntp recover",
+						}
+						logInfo.Insert()
+					}
+					ntpErrorStatus = 0
 					seelog.Infof("get time (%s) from NTPServer1(%s)", time.Format("01/02/2006 15:04:05"), c.NTPServer1)
 					cmd := exec.Command("date", "-s", time.Format("01/02/2006 15:04:05"))
 					cmd.Run()
 				} else {
-					logInfo := model.LogInfo{
-						User:     "ntp",
-						NTID:     "NA",
-						Event:    "ntp",
-						SubEvent: "sync_err",
-						Info:     "ntpserver1:" + err.Error(),
-					}
-					logInfo.Insert()
 					time, err = ntp.Time(c.NTPServer2)
 					if err == nil {
+						if ntpErrorStatus > 0 {
+							logInfo := &model.LogInfo{
+								User:     "ntp",
+								NTID:     "NA",
+								Event:    "ntp",
+								SubEvent: "sync_ok",
+								Info:     "ntp recover",
+							}
+							logInfo.Insert()
+						}
+						ntpErrorStatus = 0
 						seelog.Infof("get time (%s) from NTPServer2(%s)", time.Format("01/02/2006 15:04:05"), c.NTPServer2)
 						cmd := exec.Command("date", "-s", time.Format("01/02/2006 15:04:05"))
 						cmd.Run()
 					} else {
-						logInfo := model.LogInfo{
-							User:     "ntp",
-							NTID:     "NA",
-							Event:    "ntp",
-							SubEvent: "sync_err",
-							Info:     "ntpserver2:" + err.Error(),
+						ntpErrorStatus++
+						if ntpErrorStatus == 1 {
+							logInfo := &model.LogInfo{
+								User:     "ntp",
+								NTID:     "NA",
+								Event:    "ntp",
+								SubEvent: "sync_err",
+								Info:     err.Error(),
+							}
+							logInfo.Insert()
 						}
-						logInfo.Insert()
 						seelog.Errorf("get time error:%v", err)
 					}
 				}

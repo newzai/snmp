@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"snmp_server/globalvars"
 	"snmp_server/model"
+	"snmp_server/sessions"
 	"strings"
 
 	"github.com/cihub/seelog"
@@ -20,6 +21,14 @@ func isUpgrade(devType string) bool {
 
 func uploadHardware(c *gin.Context) {
 	devType := c.PostForm("dev_type")
+	token := c.PostForm("token")
+	user, islogin := sessions.GetUserSession(token)
+	username := "admin"
+	if islogin {
+		username = user.Username
+		//c.String(http.StatusOK, "user not login or missing token")
+		//return
+	}
 	seelog.Info("dev type is :", devType)
 	file, err := c.FormFile("file")
 	if err != nil {
@@ -30,6 +39,7 @@ func uploadHardware(c *gin.Context) {
 	if isUpgrade(devType) {
 		if !strings.HasSuffix(file.Filename, "tar") {
 			c.String(http.StatusOK, "not tar file")
+			return
 		}
 		//snmp_server 自身升级.
 		filename := globalvars.UpgradeDir + "/snmp.tar"
@@ -39,7 +49,7 @@ func uploadHardware(c *gin.Context) {
 			return
 		}
 		logInfo := &model.LogInfo{
-			User:     "NA",
+			User:     username,
 			NTID:     "NA",
 			Event:    "update",
 			SubEvent: "system",
@@ -92,7 +102,7 @@ func uploadHardware(c *gin.Context) {
 		return
 	}
 	logInfo := &model.LogInfo{
-		User:     "NA",
+		User:     username,
 		NTID:     "NA",
 		Event:    "upload",
 		SubEvent: "terminal",

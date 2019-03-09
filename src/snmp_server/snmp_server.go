@@ -56,6 +56,7 @@ func main() {
 	}
 
 	globalvars.FTPDir = *ftpDir
+	fmt.Println(*ftpDir, ",", globalvars.FTPDir)
 	globalvars.FTPUser = *ftpUser
 	globalvars.FTPGroup = *ftpGroup
 	globalvars.UpgradeDir = *upgradeDir
