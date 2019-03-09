@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"net/http"
 	"snmp_server/model"
+	"snmp_server/xdb"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -134,6 +135,10 @@ func getlogs(c *gin.Context) {
 		rows.Scan(tmp)
 		logs = append(logs, tmp)
 	}
+	ntid2name := getAllNtid2Name()
+	for _, log := range logs {
+		log.NTID = ntid2name[log.NTID]
+	}
 	result := gin.H{
 		"result":  0,
 		"message": "OK",
@@ -143,4 +148,15 @@ func getlogs(c *gin.Context) {
 		},
 	}
 	c.JSON(http.StatusOK, result)
+}
+
+func getAllNtid2Name() map[string]string {
+	ntid2name := make(map[string]string)
+	ts, err := model.GetAllTerminals(xdb.Engine)
+	if err == nil {
+		for _, t := range ts {
+			ntid2name[t.NTID] = t.Name
+		}
+	}
+	return ntid2name
 }
