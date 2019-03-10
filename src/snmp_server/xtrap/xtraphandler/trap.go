@@ -8,6 +8,7 @@ import (
 	"snmp_server/xdb"
 	"snmp_server/xtrap"
 	"snmp_server/xwarning"
+	"strings"
 
 	"github.com/cihub/seelog"
 	"github.com/soniah/gosnmp"
@@ -15,6 +16,11 @@ import (
 
 //DoWarningTest DoWarningTest
 func DoWarningTest(msg mibs.IWarning) {
+	doWarning(msg)
+}
+
+//DoWarning DoWarning
+func DoWarning(msg mibs.IWarning) {
 	doWarning(msg)
 }
 
@@ -40,8 +46,17 @@ func doWarning(msg mibs.IWarning) {
 			return
 		}
 		if t == nil {
-			seelog.Errorf("GetTerminalByNTID nil")
-			return
+			if strings.EqualFold(msg.GetNTID(), "system_ntp") {
+				t = &model.Terminal{
+					ID:   0,
+					NTID: msg.GetNTID(),
+					Name: msg.GetNTID(),
+					Path: "root",
+				}
+			} else {
+				seelog.Errorf("GetTerminalByNTID nil")
+				return
+			}
 		}
 
 		w = &xwarning.Warning{

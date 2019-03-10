@@ -23,6 +23,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	_ "snmp_server/mibs"
+	"snmp_server/xtrap/xtraphandler"
 	_ "snmp_server/xtrap/xtraphandler"
 )
 
@@ -75,6 +76,7 @@ func main() {
 	model.InitDatabase(xdb.Engine)
 	xtask.InitDatabase(xdb.EngineTask)
 	xwarning.InitDatabase(xdb.EngineWarning)
+	globalvars.Default.SetDoWarning(xtraphandler.DoWarning)
 	go xhttp.Run(globalvars.Default.WebPort)
 
 	go xsnmp.Default.Start("0.0.0.0", uint16(globalvars.Default.SnmpPort), xtrap.OnTrapHandler)

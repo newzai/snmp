@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"snmp_server/mibs"
+	"snmp_server/mibs/warning"
 	"snmp_server/model"
 	"time"
 
@@ -61,6 +63,13 @@ type Configure struct {
 	NTPServer2 string `json:"ntp_server_2"`
 	WebPort    int    `json:"web_port"`
 	SnmpPort   int    `json:"snmp_port"`
+
+	doWarning func(mibs.IWarning)
+}
+
+//SetDoWarning set DoWarning callback
+func (c *Configure) SetDoWarning(callback func(mibs.IWarning)) {
+	c.doWarning = callback
 }
 
 //Exec  后端线程
@@ -84,6 +93,13 @@ func (c *Configure) Exec() {
 							Info:     "ntp recover",
 						}
 						logInfo.Insert()
+						ntpWarning2 := &warning.NtpWarning{
+							NTID:   "system_ntp",
+							Clear:  1,
+							Status: 1,
+							Demo:   "ntp sync ok.",
+						}
+						c.doWarning(ntpWarning2)
 					}
 					ntpErrorStatus = 0
 					seelog.Infof("get time (%s) from NTPServer1(%s)", time.Format("01/02/2006 15:04:05"), c.NTPServer1)
@@ -101,6 +117,14 @@ func (c *Configure) Exec() {
 								Info:     "ntp recover",
 							}
 							logInfo.Insert()
+
+							ntpWarning2 := &warning.NtpWarning{
+								NTID:   "system_ntp",
+								Clear:  1,
+								Status: 1,
+								Demo:   "ntp sync ok.",
+							}
+							c.doWarning(ntpWarning2)
 						}
 						ntpErrorStatus = 0
 						seelog.Infof("get time (%s) from NTPServer2(%s)", time.Format("01/02/2006 15:04:05"), c.NTPServer2)
@@ -109,6 +133,14 @@ func (c *Configure) Exec() {
 					} else {
 						ntpErrorStatus++
 						if ntpErrorStatus == 1 {
+
+							ntpWarning2 := &warning.NtpWarning{
+								NTID:   "system_ntp",
+								Clear:  0,
+								Status: 1,
+								Demo:   "ntp sync error.",
+							}
+							c.doWarning(ntpWarning2)
 							logInfo := &model.LogInfo{
 								User:     "ntp",
 								NTID:     "NA",
