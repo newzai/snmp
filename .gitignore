@@ -18,3 +18,4 @@ docker/
 src/snmp_server/xlsmibs/txtmibs/txtmibs
 *.db
 src/snmp_server/configure.json
+src/snmp_server/images/
