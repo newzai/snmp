@@ -26,6 +26,8 @@ type Terminal struct {
 	IP            string    `xorm:"ip"`
 	Port          int       `xorm:"port"`
 	LastKeepalive time.Time `xorm:"keepalive"`
+	X             int       `xorm:"'x'"`
+	Y             int       `xorm:"'y'"`
 }
 
 //IsOnline get set
@@ -108,6 +110,9 @@ func GetTerminalByID(id int, engin *xorm.Engine) (*Terminal, error) {
 	var t Terminal
 	t.ID = id
 	has, err := engin.Get(&t)
+	if err != nil {
+		return nil, err
+	}
 	if !has {
 		return nil, fmt.Errorf("terminal (%d) not exist", id)
 	}
@@ -145,5 +150,11 @@ func UpdateTerminal(t *Terminal, keepalive bool, engine *xorm.Engine) error {
 	}
 	affected, err := engine.Id(t.ID).Cols(terminalUpdateCols...).Update(t)
 	seelog.Info("update terminal affected:", affected, " error:", err)
+	return err
+}
+
+//UpdateTerminalXY 更新x，y坐标轴
+func UpdateTerminalXY(t *Terminal, engine *xorm.Engine) error {
+	_, err := engine.Id(t.ID).Cols("x", "y").Update(t)
 	return err
 }

@@ -178,6 +178,62 @@ func drycontactWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
 	doWarning(msg)
 }
 
+//const trapMainBackupSwitchWarning = ".1.3.6.1.4.1.1800.50.1.19"
+func mainBackupSwitchWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.MianBackupSwitchWarning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
+//const trapNtpDropWarning = ".1.3.6.1.4.1.1800.50.1.20"
+func netpDropWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.NtpDropWarning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
+//const trapRecordingFailWarning = ".1.3.6.1.4.1.1800.50.1.21"
+func recordingFaildWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.RecordingFailWarning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
+//const trapMainPowerDropWarning = ".1.3.6.1.4.1.1800.50.1.22"
+func mainPowerDropWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.MainPowerDropWarning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
+//const trapBackupPowerDropWaring = ".1.3.6.1.4.1.1800.50.1.23"
+func backupPowerDropWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.BackupPowerDropWarning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
+//const trapMainNetDropWarning = ".1.3.6.1.4.1.1800.50.1.24"
+func mainNetDropWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.MainNetDropWarning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
+//const trapBackupNetDropWarning = ".1.3.6.1.4.1.1800.50.1.25"
+func backupNetDropWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.BackupPowerDropWarning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
 func init() {
 
 	xtrap.RegisterHandler(trapTypeDeviceMICWarning, deviceMICWarning)
@@ -192,4 +248,18 @@ func init() {
 	xtrap.RegisterHandler(trapCalloutWarning, calloutWarning)
 	xtrap.RegisterHandler(trapRegisterWarning, registerWarning)
 	xtrap.RegisterHandler(trapDrycontactWarning, drycontactWarning)
+	//const trapMainBackupSwitchWarning = ".1.3.6.1.4.1.1800.50.1.19"
+	xtrap.RegisterHandler(trapMainBackupSwitchWarning, mainBackupSwitchWarning)
+	//const trapNtpDropWarning = ".1.3.6.1.4.1.1800.50.1.20"
+	xtrap.RegisterHandler(trapNtpDropWarning, netpDropWarning)
+	//const trapRecordingFailWarning = ".1.3.6.1.4.1.1800.50.1.21"
+	xtrap.RegisterHandler(trapRecordingFailWarning, recordingFaildWarning)
+	//const trapMainPowerDropWarning = ".1.3.6.1.4.1.1800.50.1.22"
+	xtrap.RegisterHandler(trapMainPowerDropWarning, mainPowerDropWarning)
+	//const trapBackupPowerDropWaring = ".1.3.6.1.4.1.1800.50.1.23"
+	xtrap.RegisterHandler(trapBackupPowerDropWaring, backupPowerDropWarning)
+	//const trapMainNetDropWarning = ".1.3.6.1.4.1.1800.50.1.24"
+	xtrap.RegisterHandler(trapMainNetDropWarning, mainNetDropWarning)
+	//const trapBackupNetDropWarning = ".1.3.6.1.4.1.1800.50.1.25"
+	xtrap.RegisterHandler(trapBackupNetDropWarning, backupNetDropWarning)
 }

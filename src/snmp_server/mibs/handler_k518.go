@@ -644,6 +644,18 @@ func k518RingVolume(value interface{}) error {
 	return nil
 }
 
+//k518ForwardEnable k518_forward_enable int
+func k518ForwardEnable(value interface{}) error {
+	//0-禁止  1-启用
+	return nil
+}
+
+//k518ForwardNumber k518_forward_number Octstring
+func k518ForwardNumber(value interface{}) error {
+	//最大字符串长度：100
+	return nil
+}
+
 //k518SipAccountEnable k518_sip_account_enable int
 func k518SipAccountEnable(value interface{}) error {
 	//0-启用  1-禁止

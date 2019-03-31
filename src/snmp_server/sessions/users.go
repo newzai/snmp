@@ -82,7 +82,7 @@ func AllocateSession(user *model.User) string {
 		user:     user,
 		activeCh: make(chan bool, 1),
 		token:    id.String(),
-		ttl:      60,
+		ttl:      600,
 	}
 	userSessions.Store(id.String(), u)
 	go u.keepalive()

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"snmp_server/allocateid"
 
 	"github.com/go-xorm/xorm"
@@ -54,10 +55,13 @@ func GetUserByID(id int, engine *xorm.Engine) (*User, error) {
 
 	user := new(User)
 	ok, err := engine.Where("id=?", id).Get(user)
+	if err != nil {
+		return nil, err
+	}
 	if ok {
 		return user, nil
 	}
-	return nil, err
+	return nil, fmt.Errorf("user (%d) not exist", id)
 }
 
 //GetUserByName get user by name

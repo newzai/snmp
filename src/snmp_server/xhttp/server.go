@@ -13,11 +13,13 @@ import (
 //Run run http server
 func Run(httpPort int) {
 
+	os.Mkdir("images", 0777)
 	restoreAssets()
 
 	r := gin.Default()
 	r.StaticFile("/", "./dist/index.html")
 	r.Static("/static", "./dist/static")
+	r.Static("/images", "./images")
 	r.MaxMultipartMemory = 8 << 20 // 8 MiB
 	v1 := r.Group("/v1")
 	{
@@ -47,6 +49,9 @@ func Run(httpPort int) {
 		v1.POST("/system_check", systemCheck)
 		v1.POST("/get_all_users", getAllUsers)
 		v1.POST("/get_all_terminals", getAllTerminals)
+		v1.POST("/set_item", setItem)
+		v1.POST("/upload_image", uploadImage)
+		v1.GET("/upload_image_web", uploadImagesWeb)
 	}
 	pprof.Register(r)
 

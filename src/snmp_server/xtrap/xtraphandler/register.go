@@ -128,6 +128,8 @@ func Register(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
 			Type:          msg.ProcductType,
 			Parent:        parent,
 			LastKeepalive: time.Now(),
+			X:             -1,
+			Y:             -1,
 		}
 
 		if rawIP != natIP {

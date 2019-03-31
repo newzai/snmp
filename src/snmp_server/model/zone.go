@@ -2,6 +2,7 @@ package model
 
 import (
 	"encoding/json"
+	"fmt"
 	"snmp_server/allocateid"
 	"strings"
 
@@ -11,10 +12,13 @@ import (
 
 //Zone zone info
 type Zone struct {
-	ID     int    `xorm:"pk 'id' "`
-	Name   string `xorm:"notnull unique 'name' "`
-	Path   string `xorm:"varchar(255) notnull unique 'path'"`
-	Parent int    `xorm:"'parent' "`
+	ID       int    `xorm:"pk 'id' "`
+	Name     string `xorm:"notnull unique 'name' "`
+	Path     string `xorm:"varchar(255) notnull unique 'path'"`
+	Parent   int    `xorm:"'parent' "`
+	ImageURL string `xorm:" 'image_url'"`
+	X        int    `xorm:"'x'"`
+	Y        int    `xorm:"'y'"`
 }
 
 func (r *Zone) String() string {
@@ -40,7 +44,13 @@ func GetZoneByNamePath(name string, path string, engin *xorm.Engine) (*Zone, err
 func GetZoneByID(id int, engin *xorm.Engine) (*Zone, error) {
 	var zone Zone
 	zone.ID = id
-	_, err := engin.Get(&zone)
+	exist, err := engin.Get(&zone)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, fmt.Errorf("zone (%d) not exist", id)
+	}
 	return &zone, err
 }
 
@@ -92,6 +102,8 @@ func CreatePath(path string, engin *xorm.Engine) (int, error) {
 		Name:   paths[len(paths)-1],
 		Path:   path,
 		Parent: parent,
+		X:      -1,
+		Y:      -1,
 	}
 
 	_, err = engin.Insert(newZone)
@@ -100,4 +112,10 @@ func CreatePath(path string, engin *xorm.Engine) (int, error) {
 		return 0, err
 	}
 	return newZone.ID, nil
+}
+
+//UpdateZone 更新区域信息
+func UpdateZone(z *Zone, engine *xorm.Engine) error {
+	_, err := engine.Id(z.ID).Cols("image_url", "x", "y").Update(z)
+	return err
 }

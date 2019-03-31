@@ -29,9 +29,10 @@ type loginRequest struct {
     }
 }*/
 type zoneInfo struct {
-	ID   int    `json:"zoneid"`
-	Name string `json:"zonename"`
-	Path string `json:"zonepath"`
+	ID    int    `json:"zoneid"`
+	Name  string `json:"zonename"`
+	Path  string `json:"zonepath"`
+	Image string `json:"imageurl"`
 }
 type userInfo struct {
 	UserID   int      `json:"userid"`
@@ -77,6 +78,7 @@ func login(c *gin.Context) {
 	info.ZoneInfo.ID = parent.ID
 	info.ZoneInfo.Name = parent.Name
 	info.ZoneInfo.Path = parent.Path
+	info.ZoneInfo.Image = parent.ImageURL
 
 	result := gin.H{
 		"result":  0,

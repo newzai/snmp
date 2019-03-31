@@ -127,6 +127,8 @@ var oid518 = []OIDAttr{
 	OIDAttr{Name: "k518_hookon_wait_time", OID: "1800.51.15.19", Type: gosnmp.Integer, ReadOnly: false, ValidHander: k518HookonWaitTime},
 	OIDAttr{Name: "k518_ring_style", OID: "1800.51.15.20", Type: gosnmp.Integer, ReadOnly: false, ValidHander: k518RingStyle},
 	OIDAttr{Name: "k518_ring_volume", OID: "1800.51.15.21", Type: gosnmp.Integer, ReadOnly: false, ValidHander: k518RingVolume},
+	OIDAttr{Name: "k518_forward_enable", OID: "1800.51.15.22", Type: gosnmp.Integer, ReadOnly: false, ValidHander: k518ForwardEnable},
+	OIDAttr{Name: "k518_forward_number", OID: "1800.51.15.23", Type: gosnmp.OctetString, ReadOnly: false, ValidHander: k518ForwardNumber},
 	OIDAttr{Name: "k518_sip_account_enable", OID: "1800.51.16.1", Type: gosnmp.Integer, ReadOnly: false, ValidHander: k518SipAccountEnable},
 	OIDAttr{Name: "k518_sip_register_switch", OID: "1800.51.16.2", Type: gosnmp.Integer, ReadOnly: false, ValidHander: k518SipRegisterSwitch},
 	OIDAttr{Name: "k518_sip_unregister_switch", OID: "1800.51.16.3", Type: gosnmp.Integer, ReadOnly: false, ValidHander: k518SipUnregisterSwitch},

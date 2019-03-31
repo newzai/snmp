@@ -30,6 +30,9 @@ type itemInfo struct {
 	Status   int    `json:"status"`
 	DevType  string `json:"dev_type"`
 	Warnings int    `json:"warnings"`
+	ImageURL string `json:"imageurl"`
+	X        int    `json:"x"`
+	Y        int    `json:"y"`
 }
 
 func getitem(c *gin.Context) {
@@ -57,6 +60,9 @@ func getitem(c *gin.Context) {
 				ItemName: zone.Name,
 				ItemPath: zone.Path,
 				ItemType: 1,
+				ImageURL: zone.ImageURL,
+				X:        zone.X,
+				Y:        zone.Y,
 			}
 			items = append(items, item)
 		}
@@ -80,6 +86,8 @@ func getitem(c *gin.Context) {
 				Status:   status,
 				DevType:  terminal.Type,
 				Warnings: warnings,
+				X:        terminal.X,
+				Y:        terminal.Y,
 			}
 			items = append(items, item)
 		}
@@ -116,6 +124,8 @@ func getitem(c *gin.Context) {
 				Status:   status,
 				DevType:  terminal.Type,
 				Warnings: warnings,
+				X:        terminal.X,
+				Y:        terminal.Y,
 			}
 			items = append(items, item)
 		}
