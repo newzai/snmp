@@ -228,7 +228,7 @@ func mainNetDropWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
 
 //const trapBackupNetDropWarning = ".1.3.6.1.4.1.1800.50.1.25"
 func backupNetDropWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
-	msg := new(warning.BackupPowerDropWarning)
+	msg := new(warning.BackupNetDropWarning)
 	msg.FromSnmpPackage(packet)
 	seelog.Info("recv Warning:", msg)
 	doWarning(msg)
