@@ -101,12 +101,28 @@ func getitem(c *gin.Context) {
 	}
 	switch request.Data.ItemType {
 	case 1:
+		self, err := model.GetZoneByID(request.Data.ItemID, xdb.Engine)
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{"result": 1, "message": err.Error()})
+			return
+		}
+		selfInfo := itemInfo{
+			ItemID:   self.ID,
+			Parent:   self.Parent,
+			ItemName: self.Name,
+			ItemPath: self.Path,
+			ItemType: 1,
+			ImageURL: self.ImageURL,
+			X:        self.X,
+			Y:        self.Y,
+		}
 		if request.Data.Recursion {
 			items := getChildren(request.Data.ItemID)
 			result := gin.H{
 				"result":  0,
 				"message": "OK",
 				"data": gin.H{
+					"self":  selfInfo,
 					"items": items,
 				},
 			}
@@ -161,6 +177,7 @@ func getitem(c *gin.Context) {
 			"result":  0,
 			"message": "OK",
 			"data": gin.H{
+				"self":  selfInfo,
 				"items": items,
 			},
 		}
