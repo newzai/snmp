@@ -46,7 +46,7 @@ func doWarning(msg mibs.IWarning) {
 			return
 		}
 		if t == nil {
-			if strings.EqualFold(msg.GetNTID(), "system_ntp") {
+			if strings.EqualFold(msg.GetNTID(), "system_ntp") || strings.EqualFold(msg.GetNTID(), "system_disk") {
 				t = &model.Terminal{
 					ID:   0,
 					NTID: msg.GetNTID(),

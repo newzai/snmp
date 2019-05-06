@@ -46,6 +46,7 @@ func Keepalive(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
 	t.LastKeepalive = time.Now()
 	t.IP = remote.IP.String()
 	t.Port = remote.Port
+	t.ServiceStatus = msg.ServiceStatus
 	err = model.UpdateTerminal(t, true, xdb.Engine)
 	if err != nil {
 		seelog.Warnf("Update terminal error:%s", err)

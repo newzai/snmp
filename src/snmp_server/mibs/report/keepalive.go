@@ -10,9 +10,10 @@ import (
 
 //Keepalive Keepalvie
 type Keepalive struct {
-	DeviceIP   string `json:"usl_device_ip"`
-	DevicePort int    `json:"usl_device_port"`
-	NTID       string `json:"usl_ntid"`
+	DeviceIP      string `json:"usl_device_ip"`
+	DevicePort    int    `json:"usl_device_port"`
+	NTID          string `json:"usl_ntid"`
+	ServiceStatus int    `json:"usl_device_service_status"`
 }
 
 func (r *Keepalive) String() string {

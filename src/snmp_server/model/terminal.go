@@ -11,8 +11,8 @@ import (
 	"github.com/go-xorm/xorm"
 )
 
-var terminalUpdateCols = []string{"name", "path", "parent", "type", "version", "ip", "port", "keepalive"}
-var terminalUpdateKeepaliveCols = []string{"ip", "port", "keepalive"}
+var terminalUpdateCols = []string{"name", "path", "parent", "type", "version", "ip", "port", "keepalive", "service_status"}
+var terminalUpdateKeepaliveCols = []string{"ip", "port", "keepalive", "service_status"}
 
 //Terminal 设备信息
 type Terminal struct {
@@ -28,6 +28,7 @@ type Terminal struct {
 	LastKeepalive time.Time `xorm:"keepalive"`
 	X             int       `xorm:"'x'"`
 	Y             int       `xorm:"'y'"`
+	ServiceStatus int       `xorm:" 'service_status' "`
 }
 
 //IsOnline get set

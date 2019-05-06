@@ -130,6 +130,7 @@ func Register(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
 			LastKeepalive: time.Now(),
 			X:             -1,
 			Y:             -1,
+			ServiceStatus: msg.ServiceStatus,
 		}
 
 		if rawIP != natIP {
@@ -159,6 +160,7 @@ func Register(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
 		t.Port = msg.DevicePort
 		t.Version = msg.ProcductVersion
 		t.Type = msg.ProcductType
+		t.ServiceStatus = msg.ServiceStatus
 		t.LastKeepalive = time.Now()
 		t.Parent = parent
 		if rawIP != natIP {

@@ -23,18 +23,19 @@ type getitemRequest struct {
 }
 
 type itemInfo struct {
-	ItemID   int        `json:"itemid"`
-	Parent   int        `json:"parent"`
-	ItemName string     `json:"itemname"`
-	ItemPath string     `json:"itempath"`
-	ItemType int        `json:"itemtype"`
-	Status   int        `json:"status"`
-	DevType  string     `json:"dev_type"`
-	Warnings int        `json:"warnings"`
-	ImageURL string     `json:"imageurl"`
-	X        int        `json:"x"`
-	Y        int        `json:"y"`
-	Children []itemInfo `json:"children,omitempty"`
+	ItemID        int        `json:"itemid"`
+	Parent        int        `json:"parent"`
+	ItemName      string     `json:"itemname"`
+	ItemPath      string     `json:"itempath"`
+	ItemType      int        `json:"itemtype"`
+	Status        int        `json:"status"`
+	DevType       string     `json:"dev_type"`
+	Warnings      int        `json:"warnings"`
+	ImageURL      string     `json:"imageurl"`
+	X             int        `json:"x"`
+	Y             int        `json:"y"`
+	ServiceStatus int        `json:"service_status"`
+	Children      []itemInfo `json:"children,omitempty"`
 }
 
 func getChildren(parentID int) []itemInfo {
@@ -51,16 +52,17 @@ func getChildren(parentID int) []itemInfo {
 				warnings = xwarning.Stats.GetCounts(terminal.ID)
 			}
 			item := itemInfo{
-				ItemID:   terminal.ID,
-				Parent:   terminal.Parent,
-				ItemName: terminal.Name,
-				ItemPath: terminal.Path,
-				ItemType: 2,
-				Status:   status,
-				DevType:  terminal.Type,
-				Warnings: warnings,
-				X:        terminal.X,
-				Y:        terminal.Y,
+				ItemID:        terminal.ID,
+				Parent:        terminal.Parent,
+				ItemName:      terminal.Name,
+				ItemPath:      terminal.Path,
+				ItemType:      2,
+				Status:        status,
+				DevType:       terminal.Type,
+				Warnings:      warnings,
+				X:             terminal.X,
+				Y:             terminal.Y,
+				ServiceStatus: terminal.ServiceStatus,
 			}
 			items = append(items, item)
 		}
@@ -160,16 +162,17 @@ func getitem(c *gin.Context) {
 				warnings = xwarning.Stats.GetCounts(terminal.ID)
 			}
 			item := itemInfo{
-				ItemID:   terminal.ID,
-				Parent:   terminal.Parent,
-				ItemName: terminal.Name,
-				ItemPath: terminal.Path,
-				ItemType: 2,
-				Status:   status,
-				DevType:  terminal.Type,
-				Warnings: warnings,
-				X:        terminal.X,
-				Y:        terminal.Y,
+				ItemID:        terminal.ID,
+				Parent:        terminal.Parent,
+				ItemName:      terminal.Name,
+				ItemPath:      terminal.Path,
+				ItemType:      2,
+				Status:        status,
+				DevType:       terminal.Type,
+				Warnings:      warnings,
+				X:             terminal.X,
+				Y:             terminal.Y,
+				ServiceStatus: terminal.ServiceStatus,
 			}
 			items = append(items, item)
 		}
@@ -199,16 +202,17 @@ func getitem(c *gin.Context) {
 				warnings = xwarning.Stats.GetCounts(terminal.ID)
 			}
 			item := itemInfo{
-				ItemID:   terminal.ID,
-				Parent:   terminal.Parent,
-				ItemName: terminal.Name,
-				ItemPath: terminal.Path,
-				ItemType: 2,
-				Status:   status,
-				DevType:  terminal.Type,
-				Warnings: warnings,
-				X:        terminal.X,
-				Y:        terminal.Y,
+				ItemID:        terminal.ID,
+				Parent:        terminal.Parent,
+				ItemName:      terminal.Name,
+				ItemPath:      terminal.Path,
+				ItemType:      2,
+				Status:        status,
+				DevType:       terminal.Type,
+				Warnings:      warnings,
+				X:             terminal.X,
+				Y:             terminal.Y,
+				ServiceStatus: terminal.ServiceStatus,
 			}
 			items = append(items, item)
 		}

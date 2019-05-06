@@ -11,6 +11,8 @@ import (
 	"snmp_server/model"
 	"time"
 
+	"github.com/shirou/gopsutil/disk"
+
 	"github.com/cihub/seelog"
 
 	"github.com/beevik/ntp"
@@ -40,6 +42,8 @@ var ShowSQL = false
 //StartTime 系统启动时间
 var StartTime = time.Now()
 
+var diskHighUsedPrecent = float64(89.99)
+
 var (
 	//AppVersion app 版本号
 	AppVersion = "0.0.1"
@@ -54,6 +58,16 @@ var (
 //GetFTPChown chown for ftp user:group
 func GetFTPChown() string {
 	return fmt.Sprintf("%s:%s", FTPUser, FTPGroup)
+}
+
+//SetDiskHighUsedPrecent   设置硬盘使用率告警阀门值
+func SetDiskHighUsedPrecent(precent float64) {
+	diskHighUsedPrecent = precent
+	seelog.Warnf("Set dis high used precent %f", diskHighUsedPrecent)
+}
+
+func GetDiskHighUsedPrecent() float64 {
+	return diskHighUsedPrecent
 }
 
 //Configure config for snmp_server
@@ -77,6 +91,7 @@ func (c *Configure) Exec() {
 
 	seelog.Infof("Start Configure, NTPDEnable %t", c.NTPDEnable)
 	ntpErrorStatus := 0
+	isDiskWarning := false
 	for {
 		select {
 		case <-time.After(60 * time.Second):
@@ -151,6 +166,52 @@ func (c *Configure) Exec() {
 							logInfo.Insert()
 						}
 						seelog.Errorf("get time error:%v", err)
+					}
+				}
+			}
+
+			diskInfo, err := disk.Usage("/")
+			if err == nil {
+				seelog.Warnf("disk current used %f, high %f,isDiskWarning %t", diskInfo.UsedPercent, diskHighUsedPrecent, isDiskWarning)
+				if diskInfo.UsedPercent > diskHighUsedPrecent {
+					if isDiskWarning == false {
+						isDiskWarning = true
+						diskWarning := &warning.DiskWarning{
+							NTID:   "system_disk",
+							Clear:  0,
+							Status: 1,
+							Demo:   fmt.Sprintf("Disk Used Percent %f", diskInfo.UsedPercent),
+						}
+						c.doWarning(diskWarning)
+
+						logInfo := &model.LogInfo{
+							User:     "disk",
+							NTID:     "NA",
+							Event:    "disk",
+							SubEvent: "hight_level",
+							Info:     fmt.Sprintf("Disk Used Percent %f", diskInfo.UsedPercent),
+						}
+						logInfo.Insert()
+					}
+				} else {
+					if isDiskWarning == true {
+						isDiskWarning = false
+						diskWarning := &warning.DiskWarning{
+							NTID:   "system_disk",
+							Clear:  1,
+							Status: 1,
+							Demo:   fmt.Sprintf("Disk Used Percent %f", diskInfo.UsedPercent),
+						}
+						c.doWarning(diskWarning)
+
+						logInfo := &model.LogInfo{
+							User:     "disk",
+							NTID:     "NA",
+							Event:    "disk",
+							SubEvent: "low_level",
+							Info:     fmt.Sprintf("Disk Used Percent %f", diskInfo.UsedPercent),
+						}
+						logInfo.Insert()
 					}
 				}
 			}

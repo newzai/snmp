@@ -67,6 +67,7 @@ var oidCommons = []OIDAttr{
 	OIDAttr{Name: "usl_device_backup_power_status", OID: "1800.50.2.34", Type: gosnmp.Integer, ReadOnly: true, ValidHander: defaultValidHander},
 	OIDAttr{Name: "usl_device_main_net_status", OID: "1800.50.2.35", Type: gosnmp.Integer, ReadOnly: true, ValidHander: defaultValidHander},
 	OIDAttr{Name: "usl_device_backup_net_status", OID: "1800.50.2.36", Type: gosnmp.Integer, ReadOnly: true, ValidHander: defaultValidHander},
+	OIDAttr{Name: "usl_device_service_status", OID: "1800.50.2.37", Type: gosnmp.Integer, ReadOnly: true, ValidHander: defaultValidHander},
 	OIDAttr{Name: "usl_register_again", OID: "1800.50.3.1", Type: gosnmp.OctetString, ReadOnly: false, ValidHander: uslRegisterAgain},
 	OIDAttr{Name: "usl_register_ttl", OID: "1800.50.3.2", Type: gosnmp.Integer, ReadOnly: false, ValidHander: uslRegisterTtl},
 	OIDAttr{Name: "usl_register_result", OID: "1800.50.3.3", Type: gosnmp.Integer, ReadOnly: false, ValidHander: uslRegisterResult},

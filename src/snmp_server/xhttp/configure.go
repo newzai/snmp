@@ -33,7 +33,8 @@ func getConfigure(c *gin.Context) {
 }
 
 type setConfigureData struct {
-	Configure globalvars.Configure `json:"configure"`
+	Configure       globalvars.Configure `json:"configure"`
+	DiskUsedPrecent float64              `json:"disk_used_precent"`
 }
 
 type setConfigureRequest struct {
@@ -57,6 +58,15 @@ func setConfigure(c *gin.Context) {
 	globalvars.Default.NTPDEnable = request.Data.Configure.NTPDEnable
 	globalvars.Default.WebPort = request.Data.Configure.WebPort
 	globalvars.Default.SnmpPort = request.Data.Configure.SnmpPort
+	if request.Data.DiskUsedPrecent > 1.0 {
+		if request.Data.DiskUsedPrecent > 100.0 {
+			globalvars.SetDiskHighUsedPrecent(90.0)
+		} else {
+			globalvars.SetDiskHighUsedPrecent(request.Data.DiskUsedPrecent)
+		}
+	} else {
+		globalvars.SetDiskHighUsedPrecent(90.0)
+	}
 
 	err := globalvars.Default.Save()
 	if err != nil {
@@ -68,7 +78,8 @@ func setConfigure(c *gin.Context) {
 		"result":  0,
 		"message": "OK",
 		"data": gin.H{
-			"configure": globalvars.Default,
+			"configure":         globalvars.Default,
+			"disk_used_precent": globalvars.GetDiskHighUsedPrecent(),
 		},
 	}
 

@@ -17,6 +17,7 @@ type Register struct {
 	ProcductName    string `json:"usl_procduct_name"`
 	Zone            string `json:"usl_zone"`
 	ProcductVersion string `json:"usl_procduct_version"`
+	ServiceStatus   int    `json:"usl_device_service_status"`
 }
 
 func (r *Register) String() string {
