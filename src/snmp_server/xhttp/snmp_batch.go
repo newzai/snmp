@@ -37,6 +37,7 @@ type tItemInfo struct {
 //supportBatch map value is default value
 var supportBatch = map[string]interface{}{
 	//for KN518
+	"k518_language_mode":     0,
 	"k518_http_mode":         0,
 	"k518_http_port":         80,
 	"k518_telnet_port":       23,
@@ -60,7 +61,6 @@ var supportBatch = map[string]interface{}{
 	"k519_dtmf_relay_mode":   0,
 	"k519_codec_type_list":   "3 1 0 4 2",
 	"k519_hotline_enable":    0,
-	"k518_language_mode":     0,
 	"k519_hotline_number":    "690",
 	"k519_hotline_account":   0,
 	"k519_video_mode":        0,
@@ -70,19 +70,16 @@ var supportBatch = map[string]interface{}{
 	"k519_hookon_wait_time":  10,
 	"k519_ring_style":        0,
 	"k519_ring_volume":       7,
-	//for K618
+	//for KN618
 	"k618_language_mode":     0,
 	"k618_http_mode":         0,
 	"k618_http_port":         80,
-	"k618_telnet_port":       23,
 	"k618_sip_local_port":    5060,
-	"k618_dtmf_relay_mode":   0,
 	"k618_codec_type_list":   "3 1 0 4 2",
 	"k618_hotline_enable":    0,
 	"k618_hotline_number":    "690",
 	"k618_hotline_account":   0,
 	"k618_video_mode":        0,
-	"k618_video_paytype":     107,
 	"k618_microphone_volume": 5,
 	"k618_speaker_volume":    4,
 	"k618_hookon_wait_time":  10,
