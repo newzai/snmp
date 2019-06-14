@@ -1,0 +1,40 @@
+POST http://122.152.236.212:9192/v1/login
+Content-Type: application/json
+
+{
+	"username":"admin",
+	"password":"123456"
+}
+
+###
+
+POST  http://122.152.236.212:9192/v1/getitem
+Content-Type: application/json
+
+{
+    "token":"01a0328e-1425-480d-9eb5-5176050b6c4c",
+    "data":
+	{
+		"itemid": 12,
+		"itemtype":1
+	}
+}
+
+###
+
+POST  http://122.152.236.212:9192/v1/snmp
+Content-Type: application/json
+
+{
+  "token":"01a0328e-1425-480d-9eb5-5176050b6c4c",
+  "data":
+  {
+      "snmp_type":"get",
+      "itemid":13,
+      "index":0,
+      "oids":
+      {
+          "k618_software_versionyyy":"1"
+      }
+  }  
+}
