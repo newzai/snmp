@@ -897,7 +897,7 @@ system|ntid|status|offline|设备从 online--> offline 事件|完成
 system|ntid|status|create|设备初始化，创建| 完成
 user|NA|runcommand|command|params|完成
 
-- warningType : callout,camera,keyp,lcd,led,mic,quick,shell,speaker,drycontact,power,register,backup_net_drop,backup_power_drop,main_backup_switch,main_net_drop,ntp_drop,main_power_drop,recording_fail
+- warningType : callout,camera,keyp,lcd,led,mic,quick,shell,speaker,drycontact,power,register,backup_net_drop,backup_power_drop,main_backup_switch,main_net_drop,ntp_drop,main_power_drop,recording_fail, usual_input_1,usual_input_2,usual_input_3,usual_input_4,usual_input_5,usual_input_6,usual_input_7,usual_input_8,usual_input_9,usual_input_10
 
 ####  3.14.1. <a name='-1'></a>日志查询接口 
 

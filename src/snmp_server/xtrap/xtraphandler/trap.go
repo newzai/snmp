@@ -234,6 +234,85 @@ func backupNetDropWarning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
 	doWarning(msg)
 }
 
+//const trapUsualInput1Warning = ".1.3.6.1.4.1.1800.50.1.26"
+func usualInput1Warning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.UsualInput1Warning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
+//const trapUsualInput2Warning = ".1.3.6.1.4.1.1800.50.1.27"
+func usualInput2Warning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.UsualInput2Warning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
+//const trapUsualInput3Warning = ".1.3.6.1.4.1.1800.50.1.28"
+func usualInput3Warning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.UsualInput3Warning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
+//const trapUsualInput4Warning = ".1.3.6.1.4.1.1800.50.1.29"
+func usualInput4Warning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.UsualInput4Warning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
+//const trapUsualInput5Warning = ".1.3.6.1.4.1.1800.50.1.30"
+func usualInput5Warning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.UsualInput5Warning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
+//const trapUsualInput6Warning = ".1.3.6.1.4.1.1800.50.1.31"
+func usualInput6Warning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.UsualInput6Warning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
+//const trapUsualInput7Warning = ".1.3.6.1.4.1.1800.50.1.32"
+func usualInput7Warning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.UsualInput7Warning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
+//const trapUsualInput8Warning = ".1.3.6.1.4.1.1800.50.1.33"
+func usualInput8Warning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.UsualInput8Warning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
+//const trapUsualInput9Warning = ".1.3.6.1.4.1.1800.50.1.34"
+func usualInput9Warning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.UsualInput9Warning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
+
+//const trapUsualInput10Warning = ".1.3.6.1.4.1.1800.50.1.35"
+func usualInput10Warning(packet *gosnmp.SnmpPacket, remote *net.UDPAddr) {
+	msg := new(warning.UsualInput10Warning)
+	msg.FromSnmpPackage(packet)
+	seelog.Info("recv Warning:", msg)
+	doWarning(msg)
+}
 func init() {
 
 	xtrap.RegisterHandler(trapTypeDeviceMICWarning, deviceMICWarning)
@@ -262,4 +341,24 @@ func init() {
 	xtrap.RegisterHandler(trapMainNetDropWarning, mainNetDropWarning)
 	//const trapBackupNetDropWarning = ".1.3.6.1.4.1.1800.50.1.25"
 	xtrap.RegisterHandler(trapBackupNetDropWarning, backupNetDropWarning)
+	//const trapUsualInput1Warning = ".1.3.6.1.4.1.1800.50.1.26"
+	xtrap.RegisterHandler(trapUsualInput1Warning, usualInput1Warning)
+	//const trapUsualInput2Warning = ".1.3.6.1.4.1.1800.50.1.27"
+	xtrap.RegisterHandler(trapUsualInput2Warning, usualInput2Warning)
+	//const trapUsualInput3Warning = ".1.3.6.1.4.1.1800.50.1.28"
+	xtrap.RegisterHandler(trapUsualInput3Warning, usualInput3Warning)
+	//const trapUsualInput4Warning = ".1.3.6.1.4.1.1800.50.1.29"
+	xtrap.RegisterHandler(trapUsualInput4Warning, usualInput4Warning)
+	//const trapUsualInput5Warning = ".1.3.6.1.4.1.1800.50.1.30"
+	xtrap.RegisterHandler(trapUsualInput5Warning, usualInput5Warning)
+	//const trapUsualInput6Warning = ".1.3.6.1.4.1.1800.50.1.31"
+	xtrap.RegisterHandler(trapUsualInput6Warning, usualInput6Warning)
+	//const trapUsualInput7Warning = ".1.3.6.1.4.1.1800.50.1.32"
+	xtrap.RegisterHandler(trapUsualInput7Warning, usualInput7Warning)
+	//const trapUsualInput8Warning = ".1.3.6.1.4.1.1800.50.1.33"
+	xtrap.RegisterHandler(trapUsualInput8Warning, usualInput8Warning)
+	//const trapUsualInput9Warning = ".1.3.6.1.4.1.1800.50.1.34"
+	xtrap.RegisterHandler(trapUsualInput9Warning, usualInput9Warning)
+	//const trapUsualInput10Warning = ".1.3.6.1.4.1.1800.50.1.35"
+	xtrap.RegisterHandler(trapUsualInput10Warning, usualInput10Warning)
 }
